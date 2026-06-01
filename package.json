@@ -1,0 +1,9 @@
+{
+  "name": "algorithm-kingdom",
+  "version": "1.0.0",
+  "description": "算法王国大冒险 - 小学生算法思维启蒙网页游戏",
+  "scripts": {
+    "start": "npx serve . -l 3000",
+    "deploy": "tcb hosting deploy . -e your-env-id"
+  }
+}
