@@ -207,6 +207,7 @@ header {
     inset: 0;
     background-size: cover;
     background-position: center;
+    background-color: #e0e0e0;
     transition: transform .4s;
 }
 .gameNode:hover .gameNodeBg {
