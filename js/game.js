@@ -42,34 +42,24 @@ function updateStatsPanel() {
     const totalGames = 4;
     const progress = Math.round(stats.total.completed / totalGames * 100);
 
-    panel.innerHTML = `
-        <h3>📊 游戏数据</h3>
-        <div class="statProgress">
-            <div class="statProgressBar" style="width:${progress}%"></div>
-            <span>完成进度 ${stats.total.completed}/${totalGames}</span>
-        </div>
-        <div class="statList">
-            <div class="statItem">
-                <span>📝 总尝试</span>
-                <strong>${stats.total.attempts} 次</strong>
-            </div>
-            <div class="statItem">
-                <span>⏱️ 总用时</span>
-                <strong>${formatTime(stats.total.time)}</strong>
-            </div>
-            <div class="statItem">
-                <span>🎯 最佳准确率</span>
-                <strong>${Math.max(stats.cook.bestAccuracy, stats.library.bestAccuracy, stats.brush.bestAccuracy)}%</strong>
-            </div>
-        </div>
-        <div class="statDivider"></div>
-        <div class="statMini">
-            <div>🍅 厨房: ${stats.cook.completed ? '✅' : '⏳'} ${formatBestTime(stats.cook.bestTime)}</div>
-            <div>📚 图书馆: ${stats.library.completed ? '✅' : '⏳'} ${formatBestTime(stats.library.bestTime)}</div>
-            <div>🪥 刷牙: ${stats.brush.completed ? '✅' : '⏳'} ${formatBestTime(stats.brush.bestTime)}</div>
-            <div>🚦 岔路口: ${stats.branch.completed ? '✅' : '⏳'} ${formatBestTime(stats.branch.bestTime)}</div>
-        </div>
-    `;
+    const bar = panel.querySelector(".statProgressBar");
+    const label = panel.querySelector(".statProgress span");
+    if (bar) bar.style.width = progress + "%";
+    if (label) label.textContent = "完成进度 " + stats.total.completed + "/" + totalGames;
+
+    const items = panel.querySelectorAll(".statItem strong");
+    if (items[0]) items[0].textContent = stats.total.attempts + " 次";
+    if (items[1]) items[1].textContent = formatTime(stats.total.time);
+    if (items[2]) items[2].textContent = Math.max(stats.cook.bestAccuracy, stats.library.bestAccuracy, stats.brush.bestAccuracy) + "%";
+
+    function setStat(id, completed, time) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = (completed ? "✅ " : "⏳ ") + formatBestTime(time);
+    }
+    setStat("statCook", stats.cook.completed, stats.cook.bestTime);
+    setStat("statLibrary", stats.library.completed, stats.library.bestTime);
+    setStat("statBrush", stats.brush.completed, stats.brush.bestTime);
+    setStat("statBranch", stats.branch.completed, stats.branch.bestTime);
 }
 
 function recordGameResult(game, attempts, timeMs, accuracy) {

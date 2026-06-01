@@ -3,486 +3,159 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-
 <title>算法王国大冒险</title>
-
 <link rel="stylesheet" href="css/style.css">
-
-<style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
-}
-
-body {
-    min-height: 100vh;
-    background: linear-gradient(180deg, #87CEFA 0%, #EAF8FF 100%);
-}
-
-/* ===== 顶部栏 ===== */
-header {
-    height: 70px;
-    background: linear-gradient(135deg, #43A047, #66BB6A);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: clamp(20px, 4vw, 32px);
-    font-weight: bold;
-    box-shadow: 0 3px 15px rgba(0,0,0,.15);
-    letter-spacing: 2px;
-}
-
-/* ===== 地图区域 ===== */
-#gameMap {
-    min-height: calc(100vh - 70px);
-    padding: 20px;
-    background: linear-gradient(180deg, #C8E6C9, #E8F5E9);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    position: relative;
-}
-
-/* ===== 顶部行：教师 + 城堡 + 成就 ===== */
-.mapTopRow {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 20px;
-    width: 100%;
-    max-width: 1200px;
-}
-
-/* ===== AI教师 ===== */
-#teacherPanel {
-    width: 260px;
-    min-width: 160px;
-    background: white;
-    border-radius: 20px;
-    box-shadow: 0 4px 20px rgba(0,0,0,.12);
-    overflow: hidden;
-    flex-shrink: 0;
-}
-
-#teacherAvatar {
-    height: 160px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 90px;
-    background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
-}
-
-#teacherText {
-    padding: 14px 16px;
-    font-size: 15px;
-    line-height: 1.7;
-    min-height: 80px;
-    color: #444;
-}
-
-#teacherBtns {
-    text-align: center;
-    padding: 0 12px 12px;
-}
-
-.teacherBtn {
-    padding: 7px 18px;
-    border: none;
-    background: linear-gradient(135deg, #42A5F5, #1E88E5);
-    color: white;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: transform .2s, box-shadow .2s;
-}
-
-.teacherBtn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 3px 10px rgba(33,150,243,.4);
-}
-
-/* ===== 城堡 ===== */
-#castle {
-    font-size: clamp(60px, 10vw, 120px);
-    animation: float 3s infinite ease-in-out;
-    text-align: center;
-    flex: 1;
-}
-
-@keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-12px); }
-}
-
-/* ===== 成就栏 ===== */
-#achievement {
-    width: 260px;
-    min-width: 160px;
-    background: white;
-    border-radius: 20px;
-    padding: 16px;
-    box-shadow: 0 4px 20px rgba(0,0,0,.12);
-    flex-shrink: 0;
-}
-
-#achievement h2 {
-    text-align: center;
-    margin-bottom: 12px;
-    font-size: 18px;
-    color: #555;
-}
-
-.badge {
-    margin: 8px 0;
-    padding: 8px 12px;
-    background: #FFF8E1;
-    border-radius: 10px;
-    font-size: 14px;
-    text-align: center;
-    transition: background .3s, transform .3s;
-}
-
-#certificateBtn {
-    display: none;
-    width: 100%;
-    margin-top: 12px;
-    padding: 10px 16px;
-    background: linear-gradient(135deg, #FFD700, #FFA000);
-    border: none;
-    border-radius: 20px;
-    font-size: 15px;
-    font-weight: bold;
-    color: #333;
-    cursor: pointer;
-    box-shadow: 0 3px 12px rgba(255,160,0,.35);
-    transition: transform .2s, box-shadow .2s;
-}
-#certificateBtn:hover {
-    transform: scale(1.04);
-    box-shadow: 0 5px 18px rgba(255,160,0,.45);
-}
-
-/* ===== 数据统计面板 ===== */
-#statsPanel {
-    width: 260px;
-    min-width: 160px;
-    background: white;
-    border-radius: 20px;
-    padding: 16px;
-    box-shadow: 0 4px 20px rgba(0,0,0,.12);
-    flex-shrink: 0;
-    margin-top: 16px;
-}
-#statsPanel h3 {
-    text-align: center;
-    margin-bottom: 12px;
-    font-size: 16px;
-    color: #555;
-}
-.statProgress {
-    position: relative;
-    height: 24px;
-    background: #E0E0E0;
-    border-radius: 12px;
-    overflow: hidden;
-    margin-bottom: 12px;
-}
-.statProgressBar {
-    height: 100%;
-    background: linear-gradient(90deg, #66BB6A, #43A047);
-    border-radius: 12px;
-    transition: width .6s ease;
-}
-.statProgress span {
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    text-align: center;
-    line-height: 24px;
-    font-size: 12px;
-    color: #333;
-    font-weight: bold;
-}
-.statList {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-bottom: 10px;
-}
-.statItem {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 6px 10px;
-    background: #F5F5F5;
-    border-radius: 8px;
-    font-size: 13px;
-}
-.statItem strong {
-    color: #2E7D32;
-}
-.statDivider {
-    height: 1px;
-    background: #E0E0E0;
-    margin: 10px 0;
-}
-.statMini {
-    font-size: 12px;
-    color: #666;
-    line-height: 1.8;
-}
-.statMini div {
-    display: flex;
-    justify-content: space-between;
-}
-
-/* ===== 游戏节点网格 ===== */
-.nodeGrid {
-    display: grid;
-    grid-template-columns: repeat(2, 180px);
-    gap: 30px;
-    margin-top: 10px;
-}
-
-.gameNode {
-    width: 180px;
-    height: 180px;
-    background: white;
-    border-radius: 25px;
-    box-shadow: 0 6px 25px rgba(0,0,0,.1);
-    cursor: pointer;
-    transition: transform .3s, box-shadow .3s;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.gameNode:hover {
-    transform: scale(1.08) translateY(-4px);
-    box-shadow: 0 12px 35px rgba(0,0,0,.15);
-}
-
-.gameIcon {
-    font-size: 60px;
-}
-
-.gameTitle {
-    margin-top: 10px;
-    font-size: 20px;
-    font-weight: bold;
-    color: #333;
-}
-
-/* ===== 教师模式 ===== */
-#teacherMode {
-    background: linear-gradient(135deg, #7E57C2, #5E35B1);
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 25px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: transform .2s, box-shadow .2s;
-}
-
-#teacherMode:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 15px rgba(94,53,177,.4);
-}
-
-/* ===== 通用按钮 ===== */
-button {
-    cursor: pointer;
-    font-family: inherit;
-    outline: none;
-}
-
-/* ===== 响应式 ===== */
-@media (max-width: 820px) {
-    .mapTopRow {
-        flex-direction: column;
-        align-items: center;
-    }
-    #teacherPanel, #achievement {
-        width: 100%;
-        max-width: 400px;
-    }
-    #teacherAvatar {
-        height: 100px;
-        font-size: 60px;
-    }
-    .nodeGrid {
-        grid-template-columns: repeat(2, 150px);
-        gap: 20px;
-    }
-    .gameNode {
-        width: 150px;
-        height: 150px;
-    }
-    .gameIcon {
-        font-size: 50px;
-    }
-    .gameTitle {
-        font-size: 17px;
-    }
-}
-
-@media (max-width: 480px) {
-    #gameMap {
-        padding: 12px;
-        gap: 12px;
-    }
-    .nodeGrid {
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-    }
-    .gameNode {
-        width: 130px;
-        height: 130px;
-        border-radius: 18px;
-    }
-    .gameIcon {
-        font-size: 40px;
-    }
-    .gameTitle {
-        font-size: 14px;
-    }
-    .badge {
-        font-size: 12px;
-        padding: 6px 10px;
-    }
-}
-</style>
 </head>
-
 <body>
 
+<!-- ====== 顶部导航 ====== -->
 <header>
-🏰 算法王国大冒险
+  <div class="headerInner">
+    <span class="headerLogo">🏰</span>
+    <h1>算法王国大冒险</h1>
+    <span class="headerLogo right">⭐</span>
+  </div>
 </header>
 
+<!-- ====== 主页面 ====== -->
 <div id="gameMap">
 
-<div class="mapTopRow">
+  <!-- 装饰云朵 -->
+  <div class="decoCloud c1">☁️</div>
+  <div class="decoCloud c2">☁️</div>
+  <div class="decoCloud c3">☁️</div>
+  <div class="decoStar s1">⭐</div>
+  <div class="decoStar s2">✨</div>
 
-  <!-- AI教师 -->
-  <div id="teacherPanel">
-    <div id="teacherAvatar">👩‍🏫</div>
-    <div id="teacherText">
-      欢迎来到算法王国！<br>
-      今天我们将学习：什么是算法？<br>
-      算法就是完成任务的步骤哦！<br>
-      请选择一个游戏开始挑战吧！
+  <!-- ====== Hero 区域 ====== -->
+  <section class="heroBanner">
+    <div class="heroTeacher">
+      <div class="teacherAvatar">👩‍🏫</div>
+      <div class="teacherBubble" id="teacherText">
+        欢迎来到算法王国！<br>
+        算法就是完成任务的一系列步骤哦！<br>
+        选一个游戏开始挑战吧！
+      </div>
+      <button class="teacherVoiceBtn" onclick="welcomeSpeak()">🔊 听讲解</button>
     </div>
-    <div id="teacherBtns">
-      <button class="teacherBtn" onclick="welcomeSpeak()">🔊 重新讲解</button>
+    <div class="heroRight">
+      <div class="heroCastle">🏰</div>
+      <p class="heroSub">完成 4 个挑战，成为<strong>算法大师</strong></p>
     </div>
+  </section>
+
+  <!-- ====== 主内容区 ====== -->
+  <div class="mainContent">
+
+    <!-- 左侧：游戏卡片 -->
+    <div class="gameGrid">
+
+      <div class="gameNode" onclick="openGame('cook')" style="--gc:#FF7043;--gb:linear-gradient(135deg,#FFF3E0,#FFE0B2)">
+        <div class="gameNodeBg" style="background-image:url(https://i.imgur.com/F7Rr6XP.jpeg)"></div>
+        <div class="gameNodeOverlay"></div>
+        <div class="gameNodeBody">
+          <div class="gameIcon">🍅</div>
+          <div class="gameTitle">厨房小厨神</div>
+          <div class="gameTag">有序性</div>
+        </div>
+      </div>
+
+      <div class="gameNode" onclick="openGame('library')" style="--gc:#42A5F5;--gb:linear-gradient(135deg,#E3F2FD,#BBDEFB)">
+        <div class="gameNodeBg" style="background-image:url(https://i.imgur.com/jY7TG0d.jpeg)"></div>
+        <div class="gameNodeOverlay"></div>
+        <div class="gameNodeBody">
+          <div class="gameIcon">📚</div>
+          <div class="gameTitle">图书馆达人</div>
+          <div class="gameTag">有序性 + 检索</div>
+        </div>
+      </div>
+
+      <div class="gameNode" onclick="openGame('brush')" style="--gc:#26A69A;--gb:linear-gradient(135deg,#E0F2F1,#B2DFDB)">
+        <div class="gameNodeBg" style="background-image:url(https://i.imgur.com/XsH2G6F.jpeg)"></div>
+        <div class="gameNodeOverlay"></div>
+        <div class="gameNodeBody">
+          <div class="gameIcon">🪥</div>
+          <div class="gameTitle">机器人刷牙</div>
+          <div class="gameTag">有序性</div>
+        </div>
+      </div>
+
+      <div class="gameNode" onclick="openGame('branch')" style="--gc:#FFA726;--gb:linear-gradient(135deg,#FFF8E1,#FFE082)">
+        <div class="gameNodeBg" style="background-image:url(https://i.imgur.com/LS5v0oH.jpeg)"></div>
+        <div class="gameNodeOverlay"></div>
+        <div class="gameNodeBody">
+          <div class="gameIcon">🚦</div>
+          <div class="gameTitle">算法岔路口</div>
+          <div class="gameTag">分支思想</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 右侧：信息面板 -->
+    <aside class="sidePanel">
+
+      <!-- 成就 -->
+      <div id="achievement">
+        <h2>🏆 我的成就</h2>
+        <div class="badge">⚪ 厨房达人</div>
+        <div class="badge">⚪ 借书达人</div>
+        <div class="badge">⚪ 刷牙达人</div>
+        <div class="badge">⚪ 分支达人</div>
+        <button id="certificateBtn" onclick="renderCertificate()" style="display:none">🎓 领取证书</button>
+      </div>
+
+      <!-- 数据统计 -->
+      <div id="statsPanel">
+        <h3>📊 游戏数据</h3>
+        <div class="statProgress">
+          <div class="statProgressBar" style="width:0%"></div>
+          <span>完成进度 0/4</span>
+        </div>
+        <div class="statList">
+          <div class="statItem"><span>📝 总尝试</span><strong>0 次</strong></div>
+          <div class="statItem"><span>⏱️ 总用时</span><strong>0秒</strong></div>
+          <div class="statItem"><span>🎯 最佳准确率</span><strong>0%</strong></div>
+        </div>
+        <div class="statDivider"></div>
+        <div class="statMini">
+          <div>🍅 厨房 <span id="statCook">⏳ --</span></div>
+          <div>📚 图书馆 <span id="statLibrary">⏳ --</span></div>
+          <div>🪥 刷牙 <span id="statBrush">⏳ --</span></div>
+          <div>🚦 岔路口 <span id="statBranch">⏳ --</span></div>
+        </div>
+      </div>
+
+    </aside>
+
   </div>
 
-  <!-- 城堡 -->
-  <div id="castle">🏰</div>
-
-  <!-- 成就 -->
-  <div id="achievement">
-    <h2>🏆 我的成就</h2>
-    <div class="badge">⚪ 厨房达人</div>
-    <div class="badge">⚪ 借书达人</div>
-    <div class="badge">⚪ 刷牙达人</div>
-    <div class="badge">⚪ 分支达人</div>
-    <button id="certificateBtn" onclick="renderCertificate()" style="display:none">🏆 领取证书</button>
+  <!-- 底部操作栏 -->
+  <div class="bottomBar">
+    <button id="teacherMode">👨‍🏫 教师模式</button>
   </div>
-
-</div>
-
-<!-- 数据统计面板 -->
-<div id="statsPanel">
-  <h3>📊 游戏数据</h3>
-  <div class="statProgress">
-    <div class="statProgressBar" style="width:0%"></div>
-    <span>完成进度 0/4</span>
-  </div>
-  <div class="statList">
-    <div class="statItem"><span>📝 总尝试</span><strong>0 次</strong></div>
-    <div class="statItem"><span>⏱️ 总用时</span><strong>0秒</strong></div>
-    <div class="statItem"><span>🎯 最佳准确率</span><strong>0%</strong></div>
-  </div>
-  <div class="statDivider"></div>
-  <div class="statMini">
-    <div>🍅 厨房: ⏳ --</div>
-    <div>📚 图书馆: ⏳ --</div>
-    <div>🪥 刷牙: ⏳ --</div>
-    <div>🚦 岔路口: ⏳ --</div>
-  </div>
-</div>
-
-<!-- 游戏节点网格 -->
-<div class="nodeGrid">
-
-  <div class="gameNode" onclick="openGame('cook')">
-    <div class="gameIcon">🍅</div>
-    <div class="gameTitle">厨房小厨神</div>
-  </div>
-
-  <div class="gameNode" onclick="openGame('library')">
-    <div class="gameIcon">📚</div>
-    <div class="gameTitle">图书馆达人</div>
-  </div>
-
-  <div class="gameNode" onclick="openGame('brush')">
-    <div class="gameIcon">🪥</div>
-    <div class="gameTitle">机器人刷牙</div>
-  </div>
-
-  <div class="gameNode" onclick="openGame('branch')">
-    <div class="gameIcon">🚦</div>
-    <div class="gameTitle">算法岔路口</div>
-  </div>
-
-</div>
-
-<button id="teacherMode">👨‍🏫 教师模式</button>
 
 </div>
 
 <script>
 
 /* ======================
-AI数字人教师
+AI 语音教师
 ====================== */
 
 function speak(text){
-
-if(!window.speechSynthesis){
-
-alert("当前浏览器不支持语音");
-
-return;
-
-}
-
-const msg =
-new SpeechSynthesisUtterance(text);
-
-msg.lang="zh-CN";
-
-msg.rate=1.3;
-
-speechSynthesis.speak(msg);
-
+  if(!window.speechSynthesis){
+    alert("当前浏览器不支持语音");
+    return;
+  }
+  const msg = new SpeechSynthesisUtterance(text);
+  msg.lang="zh-CN";
+  msg.rate=1.3;
+  speechSynthesis.speak(msg);
 }
 
 function welcomeSpeak(){
-
-const text=
-"欢迎来到算法王国。同学们，算法就是完成任务的一系列步骤。请选择一个游戏开始挑战吧。";
-
-speak(text);
-
+  speak("欢迎来到算法王国。同学们，算法就是完成任务的一系列步骤。请选择一个游戏开始挑战吧。");
 }
 
 /* ======================
@@ -490,35 +163,12 @@ speak(text);
 ====================== */
 
 function openGame(type){
-
-switch(type){
-
-case "cook":
-
-renderCookGame();
-
-break;
-
-case "library":
-
-renderLibraryGame();
-
-break;
-
-case "brush":
-
-renderBrushGame();
-
-break;
-
-case "branch":
-
-renderBranchGame();
-
-break;
-
-}
-
+  switch(type){
+    case "cook": renderCookGame(); break;
+    case "library": renderLibraryGame(); break;
+    case "brush": renderBrushGame(); break;
+    case "branch": renderBranchGame(); break;
+  }
 }
 
 /* ======================
@@ -526,11 +176,8 @@ break;
 ====================== */
 
 window.onload=()=>{
-    loadAchievements();
-    setTimeout(
-        welcomeSpeak,
-        1000
-    );
+  loadAchievements();
+  setTimeout(welcomeSpeak, 1000);
 }
 
 </script>
