@@ -1,0 +1,669 @@
+/* =================================
+   算法王国大冒险 - 全局游戏样式
+   ================================= */
+
+button {
+    cursor: pointer;
+    font-family: inherit;
+    border: none;
+    outline: none;
+    transition: transform .2s, box-shadow .2s;
+}
+button:hover {
+    transform: scale(1.05);
+}
+button:active {
+    transform: scale(.97);
+}
+
+/* ===== 通用组件 ===== */
+
+.topBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.topBar button {
+    padding: 8px 18px;
+    background: rgba(255,255,255,.85);
+    border-radius: 20px;
+    font-size: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+.topBar h1 {
+    font-size: clamp(20px, 4vw, 32px);
+    color: #333;
+    text-align: center;
+}
+
+.teacherHint {
+    margin: 12px auto;
+    width: 90%;
+    max-width: 600px;
+    background: rgba(255,255,255,.9);
+    padding: 14px 20px;
+    border-radius: 16px;
+    font-size: clamp(16px, 2.5vw, 22px);
+    text-align: center;
+    box-shadow: 0 2px 12px rgba(0,0,0,.06);
+    color: #444;
+}
+
+.btnArea {
+    text-align: center;
+    margin-top: 16px;
+}
+.btnArea button {
+    padding: 12px 30px;
+    background: linear-gradient(135deg, #66BB6A, #43A047);
+    color: white;
+    border-radius: 25px;
+    font-size: clamp(16px, 2.5vw, 20px);
+    box-shadow: 0 4px 15px rgba(76,175,80,.35);
+}
+
+.successBox {
+    background: #C8E6C9;
+    padding: 24px;
+    margin: 16px auto;
+    max-width: 500px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,.08);
+}
+.successBox h2 {
+    margin: 10px 0;
+    color: #2E7D32;
+    font-size: clamp(20px, 3vw, 28px);
+}
+
+.errorBox {
+    background: #FFCDD2;
+    padding: 20px;
+    margin: 16px auto;
+    max-width: 500px;
+    border-radius: 20px;
+    text-align: center;
+    font-size: clamp(16px, 2.5vw, 22px);
+    color: #C62828;
+    box-shadow: 0 4px 15px rgba(0,0,0,.08);
+}
+
+.star {
+    position: fixed;
+    font-size: 28px;
+    animation: fall 3s linear forwards;
+    pointer-events: none;
+    z-index: 999;
+}
+
+@keyframes fall {
+    0% { opacity: 1; transform: translateY(-30px) rotate(0deg); }
+    100% { opacity: 0; transform: translateY(100vh) rotate(720deg); }
+}
+
+/* =================================
+   游戏1：厨房小厨神
+   ================================= */
+.cookScene {
+    min-height: 100vh;
+    background: linear-gradient(180deg, #FFF8E1, #FFE0B2);
+    padding: 16px;
+}
+
+.characterArea {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(20px, 6vw, 60px);
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+
+.role {
+    font-size: clamp(50px, 10vw, 80px);
+    text-align: center;
+}
+.role p {
+    font-size: clamp(12px, 2vw, 16px);
+    margin-top: 4px;
+    color: #666;
+}
+
+#cookCards {
+    max-width: 500px;
+    width: 90%;
+    margin: auto;
+}
+
+.cookCard {
+    background: white;
+    padding: 14px 20px;
+    margin: 10px 0;
+    border-radius: 14px;
+    cursor: move;
+    font-size: clamp(16px, 2.5vw, 22px);
+    text-align: center;
+    box-shadow: 0 3px 12px rgba(0,0,0,.1);
+    transition: transform .2s, box-shadow .2s;
+    border-left: 4px solid #FF8A65;
+}
+.cookCard:hover {
+    transform: scale(1.03);
+    box-shadow: 0 6px 20px rgba(0,0,0,.12);
+}
+.cookCard:active {
+    opacity: .7;
+}
+
+/* =================================
+   游戏2：图书馆达人
+   ================================= */
+.libraryScene {
+    min-height: 100vh;
+    background: linear-gradient(180deg, #E3F2FD, #BBDEFB);
+    padding: 16px;
+}
+
+.queryPanel {
+    text-align: center;
+    margin: 16px auto;
+    max-width: 500px;
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.queryPanel input {
+    padding: 10px 16px;
+    font-size: 16px;
+    border: 2px solid #90CAF9;
+    border-radius: 12px;
+    width: clamp(180px, 50%, 300px);
+    outline: none;
+    transition: border-color .3s;
+}
+.queryPanel input:focus {
+    border-color: #42A5F5;
+}
+
+.queryPanel button {
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #42A5F5, #1E88E5);
+    color: white;
+    border-radius: 12px;
+    font-size: 16px;
+    box-shadow: 0 3px 10px rgba(33,150,243,.3);
+}
+
+.searchBox {
+    background: white;
+    padding: 20px;
+    border-radius: 16px;
+    max-width: 450px;
+    width: 90%;
+    margin: 16px auto;
+    text-align: center;
+    box-shadow: 0 3px 15px rgba(0,0,0,.08);
+    font-size: clamp(14px, 2vw, 18px);
+}
+
+.map {
+    position: relative;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    gap: clamp(30px, 8vw, 80px);
+    margin: 20px auto;
+    max-width: 600px;
+    padding: 20px 0;
+}
+
+.shelf {
+    width: clamp(90px, 18vw, 140px);
+    height: clamp(80px, 15vw, 120px);
+    background: linear-gradient(135deg, #8D6E63, #6D4C41);
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: clamp(18px, 3vw, 28px);
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba(0,0,0,.15);
+}
+
+#player {
+    position: absolute;
+    bottom: 0;
+    left: 10px;
+    font-size: clamp(40px, 8vw, 60px);
+    transition: left .4s ease;
+}
+
+.moveBtns {
+    text-align: center;
+    margin: 12px 0;
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+}
+.moveBtns button {
+    padding: 10px 28px;
+    font-size: 22px;
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 3px 12px rgba(0,0,0,.1);
+}
+.moveBtns button:hover {
+    background: #E3F2FD;
+}
+
+#libraryCards {
+    max-width: 500px;
+    width: 90%;
+    margin: 16px auto;
+}
+
+.libraryCard {
+    background: white;
+    padding: 14px 20px;
+    margin: 10px 0;
+    border-radius: 14px;
+    cursor: move;
+    font-size: clamp(16px, 2.5vw, 20px);
+    text-align: center;
+    box-shadow: 0 3px 12px rgba(0,0,0,.1);
+    transition: transform .2s, box-shadow .2s;
+    border-left: 4px solid #64B5F6;
+}
+.libraryCard:hover {
+    transform: scale(1.03);
+    box-shadow: 0 6px 20px rgba(0,0,0,.12);
+}
+
+/* =================================
+   游戏3：机器人刷牙
+   ================================= */
+.brushScene {
+    min-height: 100vh;
+    background: linear-gradient(180deg, #E1F5FE, #B3E5FC);
+    padding: 16px;
+}
+
+.robotArea {
+    text-align: center;
+    margin: 20px 0;
+}
+
+#robotFace {
+    font-size: clamp(70px, 14vw, 120px);
+}
+
+#robotMouth {
+    font-size: clamp(40px, 8vw, 70px);
+    margin-top: 6px;
+    animation: blink 2s infinite;
+}
+
+@keyframes blink {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.12); }
+}
+
+#brushCards {
+    max-width: 500px;
+    width: 90%;
+    margin: 20px auto;
+}
+
+.brushCard {
+    background: white;
+    padding: 14px 20px;
+    margin: 10px 0;
+    border-radius: 14px;
+    font-size: clamp(16px, 2.5vw, 22px);
+    text-align: center;
+    cursor: move;
+    box-shadow: 0 3px 12px rgba(0,0,0,.1);
+    transition: transform .2s, box-shadow .2s;
+    border-left: 4px solid #4DD0E1;
+}
+.brushCard:hover {
+    transform: scale(1.03);
+    box-shadow: 0 6px 20px rgba(0,0,0,.12);
+}
+
+/* =================================
+   游戏4：算法岔路口
+   ================================= */
+.branchScene {
+    min-height: 100vh;
+    background: linear-gradient(180deg, #FFF8E1, #FFE082);
+    padding: 16px;
+}
+
+/* 学校场景 */
+.schoolArea {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.routeMap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(8px, 2vw, 20px);
+    flex-wrap: wrap;
+}
+
+.mapPoint {
+    font-size: clamp(50px, 10vw, 80px);
+}
+
+.mapArrow {
+    font-size: clamp(20px, 4vw, 36px);
+    color: #888;
+}
+
+.routeLabel {
+    font-size: clamp(14px, 2vw, 18px);
+    color: #777;
+    margin-top: 8px;
+}
+
+.choiceSub {
+    display: block;
+    font-size: clamp(11px, 1.5vw, 14px);
+    color: #888;
+    font-weight: normal;
+    margin-top: 4px;
+}
+
+.tradeoff {
+    display: inline-block;
+    font-size: clamp(13px, 2vw, 16px);
+    color: #555;
+    background: rgba(255,255,255,.6);
+    padding: 6px 14px;
+    border-radius: 10px;
+    margin-top: 6px;
+}
+
+.flowSummary {
+    font-size: clamp(14px, 2.5vw, 18px);
+    color: #555;
+    margin: 10px 0;
+    line-height: 1.6;
+}
+
+.choiceArea {
+    margin-top: 24px;
+    display: flex;
+    justify-content: center;
+    gap: clamp(12px, 3vw, 24px);
+    flex-wrap: wrap;
+}
+
+.choiceBtn {
+    padding: clamp(14px, 2vw, 20px) clamp(20px, 4vw, 36px);
+    font-size: clamp(16px, 2.5vw, 22px);
+    border: none;
+    border-radius: 16px;
+    background: white;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,.12);
+    transition: transform .25s, box-shadow .25s;
+    min-width: 120px;
+    line-height: 1.4;
+}
+.choiceBtn:hover {
+    transform: scale(1.06) translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0,0,0,.15);
+}
+.choiceBtn:active {
+    transform: scale(.97);
+}
+
+.flowTree {
+    margin-top: 20px;
+    background: white;
+    padding: 20px;
+    border-radius: 20px;
+    text-align: center;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 4px 15px rgba(0,0,0,.08);
+}
+.flowTree h2 {
+    font-size: clamp(18px, 3vw, 24px);
+    margin-bottom: 12px;
+}
+.flowChart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 0;
+}
+
+.flowNode {
+    display: inline-block;
+    padding: 8px 24px;
+    border-radius: 12px;
+    font-size: clamp(14px, 2.5vw, 18px);
+    font-weight: bold;
+    color: #333;
+    white-space: nowrap;
+}
+.flowNode.start {
+    background: #E8F5E9;
+    border: 2px solid #66BB6A;
+}
+.flowNode.decision {
+    background: #FFF3E0;
+    border: 2px solid #FFA726;
+}
+.flowNode.end {
+    background: #E3F2FD;
+    border: 2px solid #42A5F5;
+}
+.flowNode.opt {
+    background: #FAFAFA;
+    border: 2px solid #E0E0E0;
+    padding: 6px 16px;
+    font-size: clamp(12px, 2vw, 15px);
+}
+
+.flowArrow {
+    font-size: clamp(14px, 2vw, 20px);
+    color: #bbb;
+    line-height: 1;
+    padding: 0;
+}
+
+.flowBranch {
+    display: flex;
+    justify-content: center;
+    gap: clamp(12px, 3vw, 28px);
+    width: 100%;
+    padding: 4px 0;
+}
+
+.flowBranchCol {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 6px;
+    border-radius: 12px;
+    transition: background .3s;
+    min-width: 80px;
+}
+.flowBranchCol.selected {
+    background: #FFF8E1;
+    box-shadow: 0 0 0 2px #FFD700;
+    border-radius: 14px;
+}
+
+.flowTag {
+    font-size: clamp(10px, 1.5vw, 13px);
+    color: #999;
+    white-space: nowrap;
+}
+.flowBranchCol.selected .flowTag {
+    color: #F9A825;
+    font-weight: bold;
+}
+
+.flowMerge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+/* ===== 最终证书 ===== */
+#finalCertificate {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    animation: fadeIn .3s;
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.certificateBox {
+    background: white;
+    padding: clamp(24px, 5vw, 50px);
+    border-radius: 25px;
+    text-align: center;
+    font-size: clamp(18px, 3vw, 26px);
+    box-shadow: 0 0 40px rgba(255,215,0,.5);
+    max-width: 90vw;
+    animation: popIn .4s ease;
+}
+@keyframes popIn {
+    from { transform: scale(.7); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+.certificateBox h1 {
+    font-size: clamp(28px, 5vw, 42px);
+    margin-bottom: 12px;
+}
+.certificateBox button {
+    margin-top: 16px;
+    padding: 12px 30px;
+    background: linear-gradient(135deg, #FFD700, #FFA000);
+    border: none;
+    border-radius: 25px;
+    font-size: 18px;
+    color: #333;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(255,160,0,.35);
+}
+
+/* =================================
+   证书页面
+   ================================= */
+.certificateScene {
+    min-height: 100vh;
+    background: linear-gradient(180deg, #FFF8E1, #FFE0B2);
+    padding: 30px 16px;
+    text-align: center;
+}
+.certificateScene h1 {
+    font-size: clamp(24px, 5vw, 40px);
+    color: #B8860B;
+    margin-bottom: 10px;
+}
+.nameInputBox {
+    margin: 16px 0;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.nameInputBox input {
+    padding: 10px 16px;
+    font-size: 16px;
+    border: 2px solid #FFD54F;
+    border-radius: 12px;
+    width: clamp(180px, 50%, 300px);
+    outline: none;
+}
+.nameInputBox input:focus {
+    border-color: #FFB300;
+}
+.nameInputBox button {
+    padding: 10px 24px;
+    background: linear-gradient(135deg, #FFD700, #FFB300);
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    box-shadow: 0 3px 10px rgba(255,179,0,.3);
+}
+
+#certificateCanvas {
+    max-width: 100%;
+    height: auto;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,.12);
+    background: #FFF8DC;
+}
+
+.certificateScene button:not(.nameInputBox button) {
+    margin: 8px;
+    padding: 12px 28px;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    background: white;
+    box-shadow: 0 3px 12px rgba(0,0,0,.1);
+}
+.certificateScene button:not(.nameInputBox button):hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0,0,0,.12);
+}
+
+/* =================================
+   响应式：小屏
+   ================================= */
+@media (max-width: 480px) {
+    .topBar {
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+    }
+    .characterArea {
+        gap: 12px;
+    }
+    .choiceArea {
+        flex-direction: column;
+        align-items: center;
+    }
+    .map {
+        gap: 20px;
+    }
+    .shelf {
+        width: 80px;
+        height: 70px;
+        font-size: 16px;
+    }
+}
