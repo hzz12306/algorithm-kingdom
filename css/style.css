@@ -233,27 +233,7 @@ header {
     text-shadow: 0 2px 8px rgba(0,0,0,.4);
 }
 
-.gameIcon {
-    font-size: clamp(36px, 5vw, 52px);
-    margin-bottom: 6px;
-    filter: drop-shadow(0 3px 6px rgba(0,0,0,.3));
-}
 
-.gameTitle {
-    font-size: clamp(16px, 2.5vw, 22px);
-    font-weight: bold;
-    letter-spacing: 1px;
-}
-
-.gameTag {
-    font-size: clamp(11px, 1.5vw, 14px);
-    margin-top: 4px;
-    opacity: .9;
-    background: rgba(255,255,255,.2);
-    padding: 2px 12px;
-    border-radius: 10px;
-    backdrop-filter: blur(4px);
-}
 
 /* ---- 右侧面板 ---- */
 .sidePanel {
@@ -420,7 +400,6 @@ header {
     #gameMap { padding: 14px 10px 20px; gap: 18px; }
     .gameGrid { gap: 12px; }
     .gameNodeBody { padding: 10px; }
-    .gameTag { font-size: 10px; padding: 1px 8px; }
     .sidePanel { gap: 12px; }
     .decoCloud.c3 { display: none; }
     .topBar {
