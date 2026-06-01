@@ -1,0 +1,14 @@
+{
+  "envId": "your-env-id",
+  "region": "ap-guangzhou",
+  "staticDeploy": {
+    "path": ".",
+    "ignore": [
+      "node_modules",
+      ".git",
+      "cloudbaserc.json",
+      "package.json",
+      "*.md"
+    ]
+  }
+}
