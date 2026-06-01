@@ -1,0 +1,7 @@
+.claude/
+node_modules/
+*.md
+wrangler.toml
+.wranglerignore
+package.json
+package-lock.json
