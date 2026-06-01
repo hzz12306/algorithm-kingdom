@@ -14,8 +14,15 @@ const librarySteps = [
 ];
 
 let libraryCompleted = false;
+let libraryAttempts = 0;
+let libraryStartTime = { value: 0 };
+let libraryBestAccuracy = 0;
 
 function renderLibraryGame(){
+    libraryCompleted = false;
+    libraryAttempts = 0;
+    libraryBestAccuracy = 0;
+    stopTimer();
 
 document.body.innerHTML=`
 
@@ -30,6 +37,11 @@ document.body.innerHTML=`
         <h1>
         📚 图书馆小达人
         </h1>
+
+        <div class="gameStats">
+            <span>⏱️ <span id="libraryTimer">0秒</span></span>
+            <span>📝 第 <span id="libraryAttempt">0</span> 次尝试</span>
+        </div>
 
     </div>
 
@@ -81,6 +93,8 @@ document.body.innerHTML=`
 teacherSay(
 "请先查询图书，再完成借书步骤排序。"
 );
+
+    startTimer("libraryTimer", libraryStartTime);
 
 }
 
@@ -247,10 +261,7 @@ document.createElement(
 "div"
 );
 
-div.className=
-"libraryCard";
-
-div.draggable=true;
+div.className="libraryCard";
 
 div.innerText=step;
 
@@ -263,62 +274,13 @@ initLibraryDrag();
 }
 
 function initLibraryDrag(){
-
-let dragged=null;
-
-document
-.querySelectorAll(
-".libraryCard"
-)
-
-.forEach(card=>{
-
-card.addEventListener(
-
-"dragstart",
-
-()=>{
-
-dragged=card;
-
-}
-
-);
-
-card.addEventListener(
-
-"dragover",
-
-e=>{
-
-e.preventDefault();
-
-}
-
-);
-
-card.addEventListener(
-
-"drop",
-
-e=>{
-
-e.preventDefault();
-
-card.parentNode.insertBefore(
-dragged,
-card
-);
-
-}
-
-);
-
-});
-
+    initSmoothDrag(".libraryCard");
 }
 
 function checkLibraryAnswer(){
+
+libraryAttempts++;
+document.getElementById("libraryAttempt").textContent = libraryAttempts;
 
 const current=[
 
@@ -329,6 +291,9 @@ const current=[
 ].map(
 x=>x.innerText
 );
+
+const acc = calcAccuracy(current, librarySteps);
+if (acc > libraryBestAccuracy) libraryBestAccuracy = acc;
 
 if(
 
@@ -357,6 +322,9 @@ if(libraryCompleted)
 return;
 
 libraryCompleted=true;
+stopTimer();
+
+const elapsed = formatTime(Date.now() - libraryStartTime.value);
 
 teacherSay(
 
@@ -365,9 +333,7 @@ teacherSay(
 );
 
 document
-.getElementById(
-"libraryResult"
-)
+.getElementById("libraryResult")
 
 .innerHTML=
 
@@ -382,12 +348,31 @@ document
 
 📚
 
+<br><br>
+
+<div class="statRow">
+    <span>📝 尝试次数</span>
+    <span>${libraryAttempts} 次</span>
+</div>
+<div class="statRow">
+    <span>⏱️ 用时</span>
+    <span>${elapsed}</span>
+</div>
+<div class="statRow">
+    <span>🎯 准确率</span>
+    <span>${libraryBestAccuracy}%</span>
+</div>
+
+<br>
+
 ⭐ 获得成就
 
 借书达人
 
 </div>
 `;
+
+recordGameResult("library", libraryAttempts, Date.now() - libraryStartTime.value, libraryBestAccuracy);
 
 unlockAchievement(
 "借书达人"

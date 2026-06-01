@@ -1,9 +1,8 @@
 /* ==========================
    厨房小厨神
-========================== */
+   ========================== */
 
 const cookSteps = [
-
 "准备食材",
 "打鸡蛋",
 "切西红柿",
@@ -11,18 +10,24 @@ const cookSteps = [
 "炒西红柿",
 "调味",
 "装盘"
-
 ];
 
 let cookCompleted = false;
+let cookAttempts = 0;
+let cookStartTime = { value: 0 };
+let cookBestAccuracy = 0;
 
 /* ==========================
    创建页面
-========================== */
+   ========================== */
 
 function renderCookGame(){
+    cookCompleted = false;
+    cookAttempts = 0;
+    cookBestAccuracy = 0;
+    stopTimer();
 
-document.body.innerHTML=`
+    document.body.innerHTML=`
 
 <div class="cookScene">
 
@@ -35,6 +40,11 @@ document.body.innerHTML=`
         <h1>
         🍅 厨房小厨神
         </h1>
+
+        <div class="gameStats">
+            <span>⏱️ <span id="cookTimer">0秒</span></span>
+            <span>📝 第 <span id="cookAttempt">0</span> 次尝试</span>
+        </div>
 
     </div>
 
@@ -96,19 +106,19 @@ document.body.innerHTML=`
 
 </div>
 
-`;
+    `;
 
-createCookCards();
+    createCookCards();
+    startTimer("cookTimer", cookStartTime);
 
-teacherSay(
-"请把做菜步骤拖动到正确顺序。"
-);
-
+    teacherSay(
+        "请把做菜步骤拖动到正确顺序。"
+    );
 }
 
 /* ==========================
    创建步骤卡
-========================== */
+   ========================== */
 
 function createCookCards(){
 
@@ -136,8 +146,6 @@ document.createElement("div");
 
 div.className="cookCard";
 
-div.draggable=true;
-
 div.innerText=step;
 
 box.appendChild(div);
@@ -150,70 +158,20 @@ initDrag();
 
 /* ==========================
    拖拽功能
-========================== */
+   ========================== */
 
 function initDrag(){
-
-let dragged=null;
-
-document
-.querySelectorAll(".cookCard")
-
-.forEach(card=>{
-
-card.addEventListener(
-
-"dragstart",
-
-()=>{
-
-dragged=card;
-
-}
-
-);
-
-card.addEventListener(
-
-"dragover",
-
-e=>{
-
-e.preventDefault();
-
-}
-
-);
-
-card.addEventListener(
-
-"drop",
-
-e=>{
-
-e.preventDefault();
-
-const parent=
-card.parentNode;
-
-parent.insertBefore(
-dragged,
-card
-);
-
-}
-
-);
-
-});
-
+    initSmoothDrag(".cookCard");
 }
 
 /* ==========================
    检查答案
-========================== */
+   ========================== */
 
 function checkCookAnswer(){
+
+cookAttempts++;
+document.getElementById("cookAttempt").textContent = cookAttempts;
 
 const current=[
 
@@ -226,6 +184,9 @@ const current=[
 x=>x.innerText
 
 );
+
+const acc = calcAccuracy(current, cookSteps);
+if (acc > cookBestAccuracy) cookBestAccuracy = acc;
 
 if(
 
@@ -248,13 +209,16 @@ cookError();
 
 /* ==========================
    成功
-========================== */
+   ========================== */
 
 function cookSuccess(){
 
 if(cookCompleted) return;
 
 cookCompleted=true;
+stopTimer();
+
+const elapsed = formatTime(Date.now() - cookStartTime.value);
 
 teacherSay(
 
@@ -278,12 +242,31 @@ document
 
 🍅 ➜ 🍳
 
+<br><br>
+
+<div class="statRow">
+    <span>📝 尝试次数</span>
+    <span>${cookAttempts} 次</span>
+</div>
+<div class="statRow">
+    <span>⏱️ 用时</span>
+    <span>${elapsed}</span>
+</div>
+<div class="statRow">
+    <span>🎯 准确率</span>
+    <span>${cookBestAccuracy}%</span>
+</div>
+
+<br>
+
 ⭐ 获得成就：
 
 厨房达人
 
 </div>
 `;
+
+recordGameResult("cook", cookAttempts, Date.now() - cookStartTime.value, cookBestAccuracy);
 
 unlockAchievement(
 "厨房达人"
@@ -295,7 +278,7 @@ playSuccessEffect();
 
 /* ==========================
    错误
-========================== */
+   ========================== */
 
 function cookError(){
 
@@ -324,7 +307,7 @@ document
 
 /* ==========================
    动画特效
-========================== */
+   ========================== */
 
 function playSuccessEffect(){
 

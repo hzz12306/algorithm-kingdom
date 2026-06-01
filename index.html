@@ -167,6 +167,79 @@ header {
     box-shadow: 0 5px 18px rgba(255,160,0,.45);
 }
 
+/* ===== 数据统计面板 ===== */
+#statsPanel {
+    width: 260px;
+    min-width: 160px;
+    background: white;
+    border-radius: 20px;
+    padding: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,.12);
+    flex-shrink: 0;
+    margin-top: 16px;
+}
+#statsPanel h3 {
+    text-align: center;
+    margin-bottom: 12px;
+    font-size: 16px;
+    color: #555;
+}
+.statProgress {
+    position: relative;
+    height: 24px;
+    background: #E0E0E0;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 12px;
+}
+.statProgressBar {
+    height: 100%;
+    background: linear-gradient(90deg, #66BB6A, #43A047);
+    border-radius: 12px;
+    transition: width .6s ease;
+}
+.statProgress span {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    text-align: center;
+    line-height: 24px;
+    font-size: 12px;
+    color: #333;
+    font-weight: bold;
+}
+.statList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+.statItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 10px;
+    background: #F5F5F5;
+    border-radius: 8px;
+    font-size: 13px;
+}
+.statItem strong {
+    color: #2E7D32;
+}
+.statDivider {
+    height: 1px;
+    background: #E0E0E0;
+    margin: 10px 0;
+}
+.statMini {
+    font-size: 12px;
+    color: #666;
+    line-height: 1.8;
+}
+.statMini div {
+    display: flex;
+    justify-content: space-between;
+}
+
 /* ===== 游戏节点网格 ===== */
 .nodeGrid {
     display: grid;
@@ -324,6 +397,27 @@ button {
     <button id="certificateBtn" onclick="renderCertificate()" style="display:none">🏆 领取证书</button>
   </div>
 
+</div>
+
+<!-- 数据统计面板 -->
+<div id="statsPanel">
+  <h3>📊 游戏数据</h3>
+  <div class="statProgress">
+    <div class="statProgressBar" style="width:0%"></div>
+    <span>完成进度 0/4</span>
+  </div>
+  <div class="statList">
+    <div class="statItem"><span>📝 总尝试</span><strong>0 次</strong></div>
+    <div class="statItem"><span>⏱️ 总用时</span><strong>0秒</strong></div>
+    <div class="statItem"><span>🎯 最佳准确率</span><strong>0%</strong></div>
+  </div>
+  <div class="statDivider"></div>
+  <div class="statMini">
+    <div>🍅 厨房: ⏳ --</div>
+    <div>📚 图书馆: ⏳ --</div>
+    <div>🪥 刷牙: ⏳ --</div>
+    <div>🚦 岔路口: ⏳ --</div>
+  </div>
 </div>
 
 <!-- 游戏节点网格 -->

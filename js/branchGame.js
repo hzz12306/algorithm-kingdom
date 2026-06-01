@@ -3,8 +3,14 @@
    ========================== */
 
 let branchCompleted = false;
+let branchAttempts = 0;
+let branchStartTime = { value: 0 };
 
 function renderBranchGame() {
+    branchCompleted = false;
+    branchAttempts = 0;
+    stopTimer();
+
     document.body.innerHTML = `
 
 <div class="branchScene">
@@ -12,6 +18,10 @@ function renderBranchGame() {
     <div class="topBar">
         <button onclick="goHome()">🏰 返回大厅</button>
         <h1>🚦 算法岔路口</h1>
+        <div class="gameStats">
+            <span>⏱️ <span id="branchTimer">0秒</span></span>
+            <span>📝 第 <span id="branchAttempt">0</span> 次选择</span>
+        </div>
     </div>
 
     <div class="teacherHint">
@@ -46,10 +56,13 @@ function renderBranchGame() {
 </div>
 
     `;
+    startTimer("branchTimer", branchStartTime);
     teacherSay("放学了，机器人要走哪条路回家呢？不同的路就是不同的算法哦！");
 }
 
 function choosePath(type) {
+    branchAttempts++;
+    document.getElementById("branchAttempt").textContent = branchAttempts;
     switch (type) {
         case "fast":
             takeFastPath();
@@ -103,18 +116,21 @@ function takeScenicPath() {
 }
 
 function completeBranch(pathName) {
+    const elapsed = formatTime(Date.now() - branchStartTime.value);
     if (!branchCompleted) {
         branchCompleted = true;
+        stopTimer();
+        recordGameResult("branch", branchAttempts, Date.now() - branchStartTime.value, 100);
         unlockAchievement("分支达人");
     }
     const oldTree = document.querySelector(".flowTree");
     if (oldTree) oldTree.remove();
     setTimeout(() => {
-        showBranchThinking(pathName);
+        showBranchThinking(pathName, elapsed);
     }, 500);
 }
 
-function showBranchThinking(pathName) {
+function showBranchThinking(pathName, elapsed) {
     const pathIcons = {"最短路线":"🏃","安全路线":"🚸","风景路线":"🌳"};
     const icon = pathIcons[pathName] || "🚦";
     document.getElementById("branchResult").innerHTML += `
@@ -148,6 +164,16 @@ function showBranchThinking(pathName) {
             <div class="flowArrow">▼</div>
             <div class="flowNode end">🏠 到家啦！</div>
         </div>
+    </div>
+
+    <br>
+    <div class="statRow">
+        <span>📝 选择次数</span>
+        <span>${branchAttempts} 次</span>
+    </div>
+    <div class="statRow">
+        <span>⏱️ 用时</span>
+        <span>${elapsed}</span>
     </div>
 
     <p class="flowSummary">

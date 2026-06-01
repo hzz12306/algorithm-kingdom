@@ -27,6 +27,7 @@ function loadAchievements(){
     }
     updateAchievementPanel();
     checkAllAchievements();
+    updateStatsPanel();
 }
 
 function updateAchievementPanel(){

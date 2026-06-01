@@ -4,6 +4,11 @@
   "description": "算法王国大冒险 - 小学生算法思维启蒙网页游戏",
   "scripts": {
     "start": "npx serve . -l 3000",
-    "deploy": "tcb hosting deploy . -e your-env-id"
+    "deploy:cf": "npm run build && npx wrangler deploy",
+    "deploy:gh": "echo 'GitHub Pages 自动部署，推送代码到 main 分支即可触发 Actions'",
+    "build": "xcopy /Y /I /E index.html dist\\ && xcopy /Y /I /E css dist\\css\\ && xcopy /Y /I /E js dist\\js\\"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
   }
 }

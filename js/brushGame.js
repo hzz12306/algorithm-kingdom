@@ -12,12 +12,19 @@ const brushSteps=[
 ];
 
 let brushCompleted=false;
+let brushAttempts = 0;
+let brushStartTime = { value: 0 };
+let brushBestAccuracy = 0;
 
 /* ==========================
    页面
-========================== */
+   ========================== */
 
 function renderBrushGame(){
+    brushCompleted = false;
+    brushAttempts = 0;
+    brushBestAccuracy = 0;
+    stopTimer();
 
 document.body.innerHTML=`
 
@@ -36,6 +43,11 @@ document.body.innerHTML=`
         🪥 机器人刷牙
 
         </h1>
+
+        <div class="gameStats">
+            <span>⏱️ <span id="brushTimer">0秒</span></span>
+            <span>📝 第 <span id="brushAttempt">0</span> 次尝试</span>
+        </div>
 
     </div>
 
@@ -92,6 +104,8 @@ teacherSay(
 "请按照正确顺序排列刷牙步骤。"
 );
 
+    startTimer("brushTimer", brushStartTime);
+
 }
 
 function createBrushCards(){
@@ -117,10 +131,7 @@ shuffled.forEach(step=>{
 const div=
 document.createElement("div");
 
-div.className=
-"brushCard";
-
-div.draggable=true;
+div.className="brushCard";
 
 div.innerText=step;
 
@@ -133,63 +144,13 @@ initBrushDrag();
 }
 
 function initBrushDrag(){
-
-let dragged=null;
-
-document
-.querySelectorAll(".brushCard")
-
-.forEach(card=>{
-
-card.addEventListener(
-
-"dragstart",
-
-()=>{
-
-dragged=card;
-
-}
-
-);
-
-card.addEventListener(
-
-"dragover",
-
-e=>{
-
-e.preventDefault();
-
-}
-
-);
-
-card.addEventListener(
-
-"drop",
-
-e=>{
-
-e.preventDefault();
-
-const parent=
-card.parentNode;
-
-parent.insertBefore(
-dragged,
-card
-);
-
-}
-
-);
-
-});
-
+    initSmoothDrag(".brushCard");
 }
 
 function checkBrushAnswer(){
+
+brushAttempts++;
+document.getElementById("brushAttempt").textContent = brushAttempts;
 
 const current=[
 
@@ -200,6 +161,9 @@ const current=[
 ].map(
 x=>x.innerText
 );
+
+const acc = calcAccuracy(current, brushSteps);
+if (acc > brushBestAccuracy) brushBestAccuracy = acc;
 
 if(
 
@@ -228,6 +192,9 @@ if(brushCompleted)
 return;
 
 brushCompleted=true;
+stopTimer();
+
+const elapsed = formatTime(Date.now() - brushStartTime.value);
 
 teacherSay(
 
@@ -236,16 +203,12 @@ teacherSay(
 );
 
 document
-.getElementById(
-"robotMouth"
-)
+.getElementById("robotMouth")
 
 .innerHTML="😁✨";
 
 document
-.getElementById(
-"brushResult"
-)
+.getElementById("brushResult")
 
 .innerHTML=
 
@@ -260,12 +223,31 @@ document
 
 </h2>
 
+<br>
+
+<div class="statRow">
+    <span>📝 尝试次数</span>
+    <span>${brushAttempts} 次</span>
+</div>
+<div class="statRow">
+    <span>⏱️ 用时</span>
+    <span>${elapsed}</span>
+</div>
+<div class="statRow">
+    <span>🎯 准确率</span>
+    <span>${brushBestAccuracy}%</span>
+</div>
+
+<br>
+
 ⭐ 获得成就
 
 刷牙达人
 
 </div>
 `;
+
+recordGameResult("brush", brushAttempts, Date.now() - brushStartTime.value, brushBestAccuracy);
 
 unlockAchievement(
 "刷牙达人"

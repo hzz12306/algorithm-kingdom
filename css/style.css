@@ -39,6 +39,19 @@ button:active {
     text-align: center;
 }
 
+.gameStats {
+    display: flex;
+    gap: 14px;
+    font-size: clamp(12px, 2vw, 15px);
+    color: #666;
+    white-space: nowrap;
+}
+.gameStats span {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
 .teacherHint {
     margin: 12px auto;
     width: 90%;
@@ -78,6 +91,25 @@ button:active {
     margin: 10px 0;
     color: #2E7D32;
     font-size: clamp(20px, 3vw, 28px);
+}
+
+.statRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 280px;
+    margin: 6px auto;
+    padding: 6px 14px;
+    background: rgba(255,255,255,.6);
+    border-radius: 10px;
+    font-size: clamp(14px, 2vw, 17px);
+}
+.statRow span:first-child {
+    color: #555;
+}
+.statRow span:last-child {
+    font-weight: bold;
+    color: #2E7D32;
 }
 
 .errorBox {
@@ -157,6 +189,12 @@ button:active {
 }
 .cookCard:active {
     opacity: .7;
+}
+.cookCard,
+.libraryCard,
+.brushCard {
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 /* =================================
