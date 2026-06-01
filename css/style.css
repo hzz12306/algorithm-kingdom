@@ -112,6 +112,79 @@ button:active {
     color: #2E7D32;
 }
 
+/* =================================
+   数据统计面板（大厅）
+   ================================= */
+#statsPanel {
+    width: 260px;
+    min-width: 160px;
+    background: white;
+    border-radius: 20px;
+    padding: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,.12);
+    flex-shrink: 0;
+}
+#statsPanel h3 {
+    text-align: center;
+    margin-bottom: 12px;
+    font-size: 18px;
+    color: #555;
+}
+.statProgress {
+    background: #E8F5E9;
+    border-radius: 12px;
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    text-align: center;
+    font-size: 14px;
+    color: #2E7D32;
+    position: relative;
+    overflow: hidden;
+}
+.statProgressBar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background: linear-gradient(90deg, #A5D6A7, #66BB6A);
+    border-radius: 12px;
+    transition: width .5s ease;
+    opacity: .35;
+}
+.statProgress span {
+    position: relative;
+    z-index: 1;
+}
+.statList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.statItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 10px;
+    background: #F5F5F5;
+    border-radius: 10px;
+    font-size: 14px;
+}
+.statItem strong {
+    color: #2E7D32;
+}
+.statDivider {
+    height: 1px;
+    background: #E0E0E0;
+    margin: 12px 0;
+}
+.statMini {
+    font-size: 13px;
+    color: #777;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
 .errorBox {
     background: #FFCDD2;
     padding: 20px;
@@ -683,6 +756,13 @@ button:active {
 /* =================================
    响应式：小屏
    ================================= */
+@media (max-width: 820px) {
+    #statsPanel {
+        width: 100%;
+        max-width: 400px;
+    }
+}
+
 @media (max-width: 480px) {
     .topBar {
         flex-direction: column;
