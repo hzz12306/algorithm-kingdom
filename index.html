@@ -95,7 +95,7 @@
     <!-- 右侧：信息面板 -->
     <aside class="sidePanel">
 
-      <!-- 成就 -->
+      <!-- 成就 + 数据统计 -->
       <div id="achievement">
         <h2>🏆 我的成就</h2>
         <div class="badge">⚪ 厨房达人</div>
@@ -103,26 +103,27 @@
         <div class="badge">⚪ 刷牙达人</div>
         <div class="badge">⚪ 分支达人</div>
         <button id="certificateBtn" onclick="renderCertificate()" style="display:none">🎓 领取证书</button>
-      </div>
 
-      <!-- 数据统计 -->
-      <div id="statsPanel">
-        <h3>📊 游戏数据</h3>
-        <div class="statProgress">
-          <div class="statProgressBar" style="width:0%"></div>
-          <span>完成进度 0/4</span>
-        </div>
-        <div class="statList">
-          <div class="statItem"><span>📝 总尝试</span><strong>0 次</strong></div>
-          <div class="statItem"><span>⏱️ 总用时</span><strong>0秒</strong></div>
-          <div class="statItem"><span>🎯 最佳准确率</span><strong>0%</strong></div>
-        </div>
-        <div class="statDivider"></div>
-        <div class="statMini">
-          <div>🍅 厨房 <span id="statCook">⏳ --</span></div>
-          <div>📚 图书馆 <span id="statLibrary">⏳ --</span></div>
-          <div>🪥 刷牙 <span id="statBrush">⏳ --</span></div>
-          <div>🚦 岔路口 <span id="statBranch">⏳ --</span></div>
+        <div class="achieveDivider"></div>
+
+        <div id="statsPanel">
+          <h3>📊 游戏数据</h3>
+          <div class="statProgress">
+            <div class="statProgressBar" style="width:0%"></div>
+            <span>完成进度 0/4</span>
+          </div>
+          <div class="statList">
+            <div class="statItem"><span>📝 总尝试</span><strong>0 次</strong></div>
+            <div class="statItem"><span>⏱️ 总用时</span><strong>0秒</strong></div>
+            <div class="statItem"><span>🎯 最佳准确率</span><strong>0%</strong></div>
+          </div>
+          <div class="statDivider"></div>
+          <div class="statMini">
+            <div>🍅 厨房 <span id="statCook">⏳ --</span></div>
+            <div>📚 图书馆 <span id="statLibrary">⏳ --</span></div>
+            <div>🪥 刷牙 <span id="statBrush">⏳ --</span></div>
+            <div>🚦 岔路口 <span id="statBranch">⏳ --</span></div>
+          </div>
         </div>
       </div>
 
