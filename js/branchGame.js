@@ -56,6 +56,10 @@ function renderBranchGame() {
 </div>
 
     `;
+    if (getTaskResults()["branch"]) {
+        document.querySelector(".branchScene .teacherHint").innerHTML +=
+            `<br><button onclick="showTaskSheet('branch')" style="margin-top:8px;padding:6px 18px;background:linear-gradient(135deg,#42A5F5,#1E88E5);color:white;border:none;border-radius:12px;font-size:14px;cursor:pointer">📋 查看任务单</button>`;
+    }
     startTimer("branchTimer", branchStartTime);
     teacherSay("放学了，机器人要走哪条路回家呢？不同的路就是不同的算法哦！");
 }
@@ -128,6 +132,7 @@ function completeBranch(pathName) {
     setTimeout(() => {
         showBranchThinking(pathName, elapsed);
     }, 500);
+    setTimeout(() => showTaskSheet("branch"), 2000);
 }
 
 function showBranchThinking(pathName, elapsed) {

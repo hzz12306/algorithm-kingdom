@@ -125,6 +125,10 @@ function renderCookGame(){
 
     `;
 
+    if (getTaskResults()["cook"]) {
+        document.querySelector("#cookLearnView .btnArea").innerHTML +=
+            `<button onclick="showTaskSheet('cook')" style="background:linear-gradient(135deg,#42A5F5,#1E88E5);margin-left:10px">📋 查看任务单</button>`;
+    }
     teacherSay("先来学习西红柿炒鸡蛋的正确步骤吧。");
 }
 
@@ -287,13 +291,15 @@ document
 </div>
 `;
 
-recordGameResult("cook", cookAttempts, Date.now() - cookStartTime.value, cookBestAccuracy);
+    recordGameResult("cook", cookAttempts, Date.now() - cookStartTime.value, cookBestAccuracy);
 
-unlockAchievement(
-"厨房达人"
-);
+    unlockAchievement(
+        "厨房达人"
+    );
 
-playSuccessEffect();
+    playSuccessEffect();
+
+    setTimeout(() => showTaskSheet("cook"), 1500);
 
 }
 

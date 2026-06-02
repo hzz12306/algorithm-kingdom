@@ -118,6 +118,10 @@ document.body.innerHTML=`
 
 `;
 
+if (getTaskResults()["brush"]) {
+    document.querySelector("#brushLearnView .btnArea").innerHTML +=
+        `<button onclick="showTaskSheet('brush')" style="background:linear-gradient(135deg,#42A5F5,#1E88E5);margin-left:10px">📋 查看任务单</button>`;
+}
 teacherSay("先来学习刷牙的正确步骤吧。");
 }
 
@@ -278,6 +282,8 @@ unlockAchievement(
 );
 
 playSuccessEffect();
+
+setTimeout(() => showTaskSheet("brush"), 1500);
 
 }
 

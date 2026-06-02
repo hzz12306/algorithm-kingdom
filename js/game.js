@@ -249,3 +249,192 @@ function teacherSay(text){
 function goHome(){
     location.reload();
 }
+
+/* ==========================
+   学习任务单系统
+   ========================== */
+
+const taskSheets = {
+    cook: {
+        title: "厨房小厨神", icon: "🍅",
+        questions: [
+            { text: "做西红柿炒鸡蛋时应该怎样完成步骤？", options: ["必须按顺序执行", "可以随意执行"], correct: 0 },
+            { text: "下面哪种做法更合理？", options: ["先炒鸡蛋再打鸡蛋", "先打鸡蛋再炒鸡蛋"], correct: 1 },
+            { text: "通过本关你发现：", options: ["算法有顺序", "算法没有顺序"], correct: 0 }
+        ]
+    },
+    library: {
+        title: "图书馆小达人", icon: "📚",
+        questions: [
+            { text: "借书前为什么先查询图书？", options: ["更快找到图书", "更容易迷路"], correct: 0 },
+            { text: "哪种借书方法更高效？", options: ["一本一本寻找", "查询后直接寻找"], correct: 1 },
+            { text: "借书步骤能随意调换吗？", options: ["能", "不能"], correct: 1 }
+        ]
+    },
+    brush: {
+        title: "机器人刷牙", icon: "🪥",
+        questions: [
+            { text: "刷牙时应该先做什么？", options: ["挤牙膏", "漱口"], correct: 0 },
+            { text: "如果先漱口再刷牙会怎样？", options: ["顺序错误", "更科学"], correct: 0 },
+            { text: "本关说明了什么？", options: ["算法有顺序", "算法可以随意执行"], correct: 0 }
+        ]
+    },
+    branch: {
+        title: "算法挑战赛", icon: "🚀",
+        questions: [
+            { text: "机器人回家哪个算法更好？", options: ["路线更长", "路线更短"], correct: 1 },
+            { text: "借书时哪种算法效率更高？", options: ["一本一本寻找", "查询后直接寻找"], correct: 1 },
+            { text: "下面关于算法说法正确的是？", options: ["一个问题只有一种算法", "一个问题可以有多种算法"], correct: 1 },
+            { text: "选择算法时应该考虑什么？", options: ["是否正确", "是否高效", "是否正确且高效"], correct: 2 }
+        ]
+    }
+};
+
+function getTaskResults() {
+    const saved = localStorage.getItem("taskResults");
+    return saved ? JSON.parse(saved) : {};
+}
+
+function saveTaskResult(gameId, answers) {
+    const sheet = taskSheets[gameId];
+    const correct = answers.map((a, i) => a === sheet.questions[i].correct);
+    const score = correct.filter(Boolean).length;
+    const total = sheet.questions.length;
+    const results = getTaskResults();
+    results[gameId] = { answers, correct, score, total, timestamp: Date.now() };
+    localStorage.setItem("taskResults", JSON.stringify(results));
+    return { score, total, correct, answers };
+}
+
+let _taskQIndex = 0;
+
+function showTaskSheet(gameId) {
+    const sheet = taskSheets[gameId];
+    if (!sheet) return;
+    const existing = getTaskResults()[gameId];
+    _taskQIndex = 0;
+    const modal = document.createElement("div");
+    modal.id = "taskSheetModal";
+    modal.innerHTML = `
+    <div class="taskOverlay">
+      <div class="taskBox">
+        <div class="taskHeader">
+          <span class="taskIcon">${sheet.icon}</span>
+          <h2>${sheet.title}</h2>
+          <p class="taskSub">${existing ? "✅ 已完成 — 查看你的答案" : "完成挑战后，来填一填学习任务单吧！"}</p>
+        </div>
+        <div class="taskBody" id="taskBody"></div>
+      </div>
+    </div>`;
+    document.body.appendChild(modal);
+    const body = document.getElementById("taskBody");
+    if (existing) {
+        body.innerHTML = renderTaskReview(gameId, existing) + `<button class="taskCloseBtn" onclick="closeTaskSheet()">关闭</button>`;
+    } else {
+        body.innerHTML = renderTaskQuestion(gameId);
+    }
+}
+
+function renderTaskReview(gameId, data) {
+    const sheet = taskSheets[gameId];
+    return sheet.questions.map((q, qi) => {
+        const isCorrect = data.correct[qi];
+        const selIdx = data.answers[qi];
+        return `
+        <div class="taskQuestion ${isCorrect ? 'taskCorrect' : 'taskWrong'}">
+          <p class="taskQText">${qi+1}. ${q.text}</p>
+          <div class="taskOptions">
+            ${q.options.map((opt, oi) => {
+                let cls = "taskOption";
+                if (oi === selIdx) cls += isCorrect ? " optSelected" : " optWrong";
+                if (oi === q.correct) cls += " optCorrect";
+                return `<div class="${cls}" style="pointer-events:none">${oi === q.correct ? "✅ " : ""}${opt}</div>`;
+            }).join("")}
+          </div>
+        </div>`;
+    }).join("") + `
+    <div class="taskResult">
+      ⭐ 获得 ${data.score}/${data.total} 颗星
+    </div>`;
+}
+
+function renderTaskQuestion(gameId) {
+    const sheet = taskSheets[gameId];
+    const q = sheet.questions[_taskQIndex];
+    const allAnswered = getTaskResults()[gameId];
+    if (allAnswered || _taskQIndex >= sheet.questions.length) return "";
+    return `
+    <div class="taskProgress">第 ${_taskQIndex+1}/${sheet.questions.length} 题</div>
+    <div class="taskQuestion active">
+      <p class="taskQText">${q.text}</p>
+      <div class="taskOptions">
+        ${q.options.map((opt, oi) =>
+            `<div class="taskOption" onclick="selectTaskAnswer('${gameId}', ${oi})">${opt}</div>`
+        ).join("")}
+      </div>
+    </div>`;
+}
+
+function selectTaskAnswer(gameId, optIdx) {
+    const sheet = taskSheets[gameId];
+    const results = getTaskResults();
+    const _answers = results[gameId] ? results[gameId].answers.slice() : [];
+    _answers[_taskQIndex] = optIdx;
+    if (_taskQIndex < sheet.questions.length - 1) {
+        _taskQIndex++;
+        document.getElementById("taskBody").innerHTML = renderTaskQuestion(gameId);
+    } else {
+        const { score, total, correct, answers } = saveTaskResult(gameId, _answers);
+        document.getElementById("taskBody").innerHTML = renderTaskReview(gameId, { answers, correct, score, total }) +
+            `<button class="taskCloseBtn" onclick="closeTaskSheet()">返回大厅</button>`;
+    }
+}
+
+function closeTaskSheet() {
+    const m = document.getElementById("taskSheetModal");
+    if (m) m.remove();
+}
+
+function renderGrowthRecord() {
+    const results = getTaskResults();
+    const totalStars = Object.values(results).reduce((s, r) => s + r.score, 0);
+    const totalPossible = Object.values(taskSheets).reduce((sum, s) => sum + s.questions.length, 0);
+    const m = document.createElement("div");
+    m.id = "growthRecordModal";
+    m.innerHTML = `
+    <div class="growthOverlay">
+      <div class="growthBox">
+        <h1>📒 我的成长记录册</h1>
+        <div class="growthGrid">
+          ${Object.keys(taskSheets).map(id => {
+              const r = results[id];
+              const s = taskSheets[id];
+              const done = !!r;
+              return `
+              <div class="growthCard ${done ? 'growthDone' : ''}">
+                <div class="growthCardHeader">
+                  <span class="growthIcon">${s.icon}</span>
+                  <span class="growthTitle">${s.title}</span>
+                  <span class="growthStatus">${done ? "✅ 已完成" : "⏳ 未完成"}</span>
+                </div>
+                ${done ? `
+                  <div class="growthStars">${"⭐".repeat(r.score)}${"☆".repeat(r.total - r.score)}</div>
+                  <div class="growthScore">正确 ${r.score}/${r.total} 题</div>
+                  <div class="growthAnswers">${r.answers.map((a, i) =>
+                      `<span class="growthAns ${r.correct[i] ? 'ansOk' : 'ansNo'}">${i+1}${r.correct[i] ? "✅" : "❌"}</span>`
+                  ).join("")}</div>
+                ` : `<div class="growthEmpty">尚未完成本关</div>`}
+              </div>`;
+          }).join("")}
+        </div>
+        <div class="growthSummary">⭐ 总计获得 ${totalStars}/${totalPossible} 颗星星</div>
+        <div class="growthBtnArea"><button class="growthCloseBtn" onclick="closeGrowthRecord()">关闭</button></div>
+      </div>
+    </div>`;
+    document.body.appendChild(m);
+}
+
+function closeGrowthRecord() {
+    const m = document.getElementById("growthRecordModal");
+    if (m) m.remove();
+}
