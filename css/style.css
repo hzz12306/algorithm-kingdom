@@ -1282,6 +1282,47 @@ header {
     font-weight: bold;
     color: #E65100;
 }
+.growthSelfEvalSection {
+    margin: 18px 0 10px;
+    padding: 16px;
+    background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+    border-radius: 16px;
+    text-align: center;
+}
+.growthSelfEvalSection h2 {
+    margin: 0 0 12px;
+    font-size: clamp(16px, 2.5vw, 20px);
+    color: #2E7D32;
+}
+.growthSelfEvalMsg {
+    color: #666;
+    font-size: 14px;
+    padding: 8px;
+}
+.growthSelfEvalDone {
+    text-align: left;
+}
+.selfEvalRow {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: rgba(255,255,255,.7);
+    border-radius: 10px;
+    margin-bottom: 6px;
+    font-size: 14px;
+}
+.selfEvalLabel {
+    color: #555;
+    font-weight: bold;
+}
+.selfEvalValue {
+    color: #2E7D32;
+    font-weight: bold;
+}
+.selfEvalReEval {
+    text-align: center;
+    margin-top: 10px;
+}
 .growthBtnArea { text-align: center; margin-top: 14px; }
 .growthCloseBtn {
     padding: 12px 36px;

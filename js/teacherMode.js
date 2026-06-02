@@ -698,7 +698,7 @@ function tmImportJSON() {
                 if (data.leaderboard) localStorage.setItem("algorithmKingdomLeaderboard", JSON.stringify(data.leaderboard));
                 if (data.gameStats) sessionStorage.setItem("gameStats", JSON.stringify(data.gameStats));
                 if (data.achievements) sessionStorage.setItem("achievements", JSON.stringify(data.achievements));
-                if (data.taskResults) sessionStorage.setItem("taskResults", JSON.stringify(data.taskResults));
+                if (data.taskResults) localStorage.setItem("taskResults", JSON.stringify(data.taskResults));
                 alert("✅ 数据导入成功！请刷新页面查看。");
                 location.reload();
             } catch(err) {

@@ -276,40 +276,48 @@ const taskSheets = {
     cook: {
         title: "厨房小厨神", icon: "🍅",
         questions: [
-            { text: "做西红柿炒鸡蛋时应该怎样完成步骤？", options: ["必须按顺序执行", "可以随意执行"], correct: 0 },
-            { text: "下面哪种做法更合理？", options: ["先炒鸡蛋再打鸡蛋", "先打鸡蛋再炒鸡蛋"], correct: 1 },
-            { text: "通过本关你发现：", options: ["算法有顺序", "算法没有顺序"], correct: 0 }
+            { text: "做西红柿炒鸡蛋时，下面哪种做法更合理？", options: ["先打鸡蛋，再炒鸡蛋", "先炒鸡蛋，再打鸡蛋"], correct: 0 },
+            { text: "如果把"炒鸡蛋"和"打鸡蛋"交换顺序，会发生什么？", options: ["不能完成这道菜", "做得更快", "没有变化"], correct: 0 },
+            { text: "通过这一关你发现：", options: ["做事情要按一定顺序进行", "做事情可以随便进行"], correct: 0 }
         ]
     },
     library: {
         title: "图书馆小达人", icon: "📚",
         questions: [
-            { text: "借书前先查询图书有什么好处？", options: ["能更快找到书", "浪费时间"], correct: 0 },
-            { text: "哪种找书方法效率更高？", options: ["一排一排慢慢找", "先查询再去找"], correct: 1 },
-            { text: "为什么借书需要按步骤来？", options: ["步骤可以调换", "步骤有先后顺序不可调换"], correct: 1 }
+            { text: "借书时先查询图书位置有什么好处？", options: ["更快找到图书", "更容易迷路", "借不到图书"], correct: 0 },
+            { text: "下面哪种借书方法更快？", options: ["一本书架一本书架寻找", "查询后直接到对应书架"], correct: 1 },
+            { text: "如果把借书步骤随意打乱，会怎么样？", options: ["可能找不到书", "会更快借到书", "没有影响"], correct: 0 }
         ]
     },
     brush: {
         title: "机器人刷牙", icon: "🪥",
         questions: [
-            { text: "刷牙时应该先做什么？", options: ["挤牙膏", "漱口"], correct: 0 },
-            { text: "如果先漱口再刷牙会怎样？", options: ["顺序错误", "更科学"], correct: 0 },
-            { text: "本关说明了什么？", options: ["算法顺序很重要", "算法可以随意执行"], correct: 0 }
+            { text: "刷牙时第一步应该是？", options: ["挤牙膏", "漱口", "收拾牙刷"], correct: 0 },
+            { text: "如果先漱口再刷牙，可能会怎样？", options: ["刷牙效果变差", "刷牙效果更好", "完全一样"], correct: 0 },
+            { text: "机器人刷牙成功说明了什么？", options: ["按正确顺序执行步骤很重要", "顺序不重要"], correct: 0 }
         ]
     },
     branch: {
         title: "算法挑战赛", icon: "🚀",
         questions: [
-            { text: "机器人回家有几种路线可以选择？", options: ["只有一种", "有多种"], correct: 1 },
-            { text: "选择最快的路线说明了什么？", options: ["算法可以比较优劣", "所有路线都一样"], correct: 0 },
-            { text: "如果想看风景应该选哪种路线？", options: ["最快路线", "适合自己的路线"], correct: 1 },
-            { text: "下面关于算法说法正确的是？", options: ["一个问题只有一种算法", "一个问题可以有多种算法，我们选择更优的"], correct: 1 }
+            { text: "帮助机器人回家时，为什么选择路线更短的算法？", options: ["更快到达终点", "看起来更漂亮", "没有区别"], correct: 0 },
+            { text: "借书挑战中，哪种方法效率更高？", options: ["一本一本找", "先查询再找"], correct: 1 },
+            { text: "通过本关你发现：", options: ["一个问题可以有多种解决方法", "一个问题只有一种解决方法"], correct: 0 },
+            { text: "选择算法时应该优先考虑：", options: ["是否正确", "是否省时间", "是否正确并且高效"], correct: 2 }
+        ]
+    },
+    selfEval: {
+        title: "成长自评", icon: "✏️",
+        questions: [
+            { text: "最喜欢的关卡", options: ["厨房小厨神", "图书馆小达人", "机器人刷牙", "算法挑战赛"], correct: 0 },
+            { text: "最大收获", options: ["做事要有顺序", "算法由步骤组成", "一个问题可以有不同算法", "要选择更优算法"], correct: 0 },
+            { text: "自我表现", options: ["继续努力", "表现不错", "非常棒"], correct: 2 }
         ]
     }
 };
 
 function getTaskResults() {
-    const saved = sessionStorage.getItem("taskResults");
+    const saved = localStorage.getItem("taskResults");
     return saved ? JSON.parse(saved) : {};
 }
 
@@ -320,7 +328,8 @@ function saveTaskResult(gameId, answers) {
     const total = sheet.questions.length;
     const results = getTaskResults();
     results[gameId] = { answers, correct, score, total, timestamp: Date.now() };
-    sessionStorage.setItem("taskResults", JSON.stringify(results));
+    localStorage.setItem("taskResults", JSON.stringify(results));
+    updateStatsPanel();
     return { score, total, correct, answers };
 }
 
@@ -333,6 +342,7 @@ function showTaskSheet(gameId) {
     const existing = getTaskResults()[gameId];
     _taskQIndex = 0;
     _taskAnswers = {};
+    const isSelfEval = gameId === "selfEval";
     const modal = document.createElement("div");
     modal.id = "taskSheetModal";
     modal.innerHTML = `
@@ -340,8 +350,8 @@ function showTaskSheet(gameId) {
       <div class="taskBox">
         <div class="taskHeader">
           <span class="taskIcon">${sheet.icon}</span>
-          <h2>${sheet.title}</h2>
-          <p class="taskSub">${existing ? "✅ 已完成 — 查看你的答案" : "完成挑战后，来填一填学习任务单吧！"}</p>
+          <h2>${isSelfEval ? "📝 成长自评" : sheet.title}</h2>
+          <p class="taskSub">${existing ? "✅ 已完成 — 查看你的答案" : (isSelfEval ? "想一想，选一选吧！" : "完成挑战后，来填一填学习任务单吧！")}</p>
         </div>
         <div class="taskBody" id="taskBody"></div>
       </div>
@@ -357,6 +367,19 @@ function showTaskSheet(gameId) {
 
 function renderTaskReview(gameId, data) {
     const sheet = taskSheets[gameId];
+    if (gameId === "selfEval") {
+        return sheet.questions.map((q, qi) => `
+        <div class="taskQuestion taskCorrect">
+          <p class="taskQText">${qi+1}. ${q.text}</p>
+          <div class="taskOptions">
+            ${q.options.map((opt, oi) => {
+                const cls = "taskOption" + (oi === data.answers[qi] ? " optSelected" : "");
+                return `<div class="${cls}" style="pointer-events:none">${opt}</div>`;
+            }).join("")}
+          </div>
+        </div>`;
+        }).join("");
+    }
     return sheet.questions.map((q, qi) => {
         const isCorrect = data.correct[qi];
         const selIdx = data.answers[qi];
@@ -383,10 +406,11 @@ function renderTaskQuestion(gameId) {
     const q = sheet.questions[_taskQIndex];
     const allAnswered = getTaskResults()[gameId];
     if (allAnswered || _taskQIndex >= sheet.questions.length) return "";
+    const isSelfEval = gameId === "selfEval";
     return `
-    <div class="taskProgress">第 ${_taskQIndex+1}/${sheet.questions.length} 题</div>
+    <div class="taskProgress">${isSelfEval ? "自我评价" : "第 " + (_taskQIndex+1) + "/" + sheet.questions.length + " 题"}</div>
     <div class="taskQuestion active">
-      <p class="taskQText">${q.text}</p>
+      <p class="taskQText">${isSelfEval ? "💭 " : ""}${q.text}</p>
       <div class="taskOptions">
         ${q.options.map((opt, oi) =>
             `<div class="taskOption" onclick="selectTaskAnswer('${gameId}', ${oi})">${opt}</div>`
@@ -414,48 +438,34 @@ function closeTaskSheet() {
     if (m) m.remove();
 }
 
-function renderGrowthRecord() {
-    const raw = getTaskResults();
-    const results = {};
-    Object.keys(raw).filter(k => k !== '_version').forEach(k => results[k] = raw[k]);
-    const totalStars = Object.values(results).reduce((s, r) => s + (r.score || 0), 0);
-    const totalPossible = Object.values(taskSheets).reduce((sum, s) => sum + s.questions.length, 0);
-    const m = document.createElement("div");
-    m.id = "growthRecordModal";
-    m.innerHTML = `
-    <div class="growthOverlay">
-      <div class="growthBox">
-        <h1>📒 我的成长记录册</h1>
-        <div class="growthGrid">
-          ${Object.keys(taskSheets).map(id => {
-              const r = results[id];
-              const s = taskSheets[id];
-              const done = !!r;
-              return `
-              <div class="growthCard ${done ? 'growthDone' : ''}">
-                <div class="growthCardHeader">
-                  <span class="growthIcon">${s.icon}</span>
-                  <span class="growthTitle">${s.title}</span>
-                  <span class="growthStatus">${done ? "✅ 已完成" : "⏳ 未完成"}</span>
-                </div>
-                ${done ? `
-                  <div class="growthStars">${"⭐".repeat(r.score)}${"☆".repeat(r.total - r.score)}</div>
-                  <div class="growthScore">正确 ${r.score}/${r.total} 题</div>
-                  <div class="growthAnswers">${r.answers.map((a, i) =>
-                      `<span class="growthAns ${r.correct[i] ? 'ansOk' : 'ansNo'}">${i+1}${r.correct[i] ? "✅" : "❌"}</span>`
-                  ).join("")}</div>
-                ` : `<div class="growthEmpty">尚未完成本关</div>`}
-              </div>`;
-          }).join("")}
-        </div>
-        <div class="growthSummary">⭐ 总计获得 ${totalStars}/${totalPossible} 颗星星</div>
-        <div class="growthBtnArea"><button class="growthCloseBtn" onclick="closeGrowthRecord()">关闭</button></div>
-      </div>
-    </div>`;
-    document.body.appendChild(m);
+function renderSelfEvalSection() {
+    const results = getTaskResults();
+    const saved = results.selfEval;
+    const allGamesDone = ["cook", "library", "brush", "branch"].every(id => !!results[id]);
+    if (!allGamesDone) {
+        return `<div class="growthSelfEvalMsg">完成所有 4 个挑战后，可以来这里进行自我评价 ✨</div>`;
+    }
+    if (saved) {
+        const sheet = taskSheets.selfEval;
+        return `
+        <div class="growthSelfEvalDone">
+          ${sheet.questions.map((q, qi) => `
+            <div class="selfEvalRow">
+              <span class="selfEvalLabel">${q.text}</span>
+              <span class="selfEvalValue">${q.options[saved.answers[qi]]}</span>
+            </div>
+          `).join("")}
+          <div class="selfEvalReEval">
+            <button class="growthCertBtn" onclick="closeGrowthRecord();showSelfEval()">📝 重新评价</button>
+          </div>
+        </div>`;
+    }
+    return `<button class="growthCertBtn" onclick="closeGrowthRecord();showSelfEval()">✏️ 开始自我评价</button>`;
 }
 
-function closeGrowthRecord() {
+function showSelfEval() {
+    showTaskSheet("selfEval");
+}
     const m = document.getElementById("growthRecordModal");
     if (m) m.remove();
 }
@@ -668,6 +678,10 @@ function renderGrowthRecord() {
           </div>
           ` : '<div class="growthLevel" style="background:#f5f5f5">继续完成更多挑战，获得证书吧！</div>'}
           ${scores.level > 0 ? `<button class="growthCertBtn" onclick="closeGrowthRecord();renderCertificate()">🎓 领取电子证书</button>` : ""}
+        </div>
+        <div class="growthSelfEvalSection">
+          <h2>✏️ 成长自评</h2>
+          ${renderSelfEvalSection()}
         </div>
         <div class="growthBtnArea"><button class="growthCloseBtn" onclick="closeGrowthRecord()">关闭</button></div>
       </div>
