@@ -14,11 +14,11 @@ function unlockAchievement(name){
 }
 
 function saveAchievements(){
-    sessionStorage.setItem("achievements", JSON.stringify(achievements));
+    localStorage.setItem("achievements", JSON.stringify(achievements));
 }
 
 function loadAchievements(){
-    const saved = sessionStorage.getItem("achievements");
+    const saved = localStorage.getItem("achievements");
     if (saved) {
         const data = JSON.parse(saved);
         Object.keys(data).forEach(key => {

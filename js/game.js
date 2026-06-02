@@ -3,7 +3,7 @@
    ========================== */
 
 function getGameStats() {
-    const saved = sessionStorage.getItem("gameStats");
+    const saved = localStorage.getItem("gameStats");
     if (saved) {
         const data = JSON.parse(saved);
         // JSON 不支持 Infinity，还原 null 为 Infinity
@@ -34,7 +34,7 @@ function saveGameStats(game, data) {
                           + (stats.brush.completed ? 1 : 0)
                           + (stats.branch.completed ? 1 : 0);
 
-    sessionStorage.setItem("gameStats", JSON.stringify(stats));
+    localStorage.setItem("gameStats", JSON.stringify(stats));
     updateStatsPanel();
 }
 
