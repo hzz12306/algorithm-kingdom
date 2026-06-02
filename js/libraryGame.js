@@ -108,9 +108,13 @@ document.body.innerHTML=`
 
 `;
 
-if (getTaskResults()["library"]) {
+const libraryTask = getTaskResults()["library"];
+if (libraryTask) {
     document.querySelector("#libraryLearnView .btnArea").innerHTML +=
         `<button onclick="showTaskSheet('library')" style="background:linear-gradient(135deg,#42A5F5,#1E88E5);margin-left:10px">📋 查看任务单</button>`;
+} else if (achievements["借书达人"]) {
+    document.querySelector("#libraryLearnView .btnArea").innerHTML +=
+        `<button onclick="showTaskSheet('library')" style="background:linear-gradient(135deg,#FFA726,#F57C00);margin-left:10px">📝 填写任务单</button>`;
 }
 teacherSay("先来学习借书的正确步骤吧。");
 }

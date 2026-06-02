@@ -118,9 +118,13 @@ document.body.innerHTML=`
 
 `;
 
-if (getTaskResults()["brush"]) {
+const brushTask = getTaskResults()["brush"];
+if (brushTask) {
     document.querySelector("#brushLearnView .btnArea").innerHTML +=
         `<button onclick="showTaskSheet('brush')" style="background:linear-gradient(135deg,#42A5F5,#1E88E5);margin-left:10px">📋 查看任务单</button>`;
+} else if (achievements["刷牙达人"]) {
+    document.querySelector("#brushLearnView .btnArea").innerHTML +=
+        `<button onclick="showTaskSheet('brush')" style="background:linear-gradient(135deg,#FFA726,#F57C00);margin-left:10px">📝 填写任务单</button>`;
 }
 teacherSay("先来学习刷牙的正确步骤吧。");
 }
