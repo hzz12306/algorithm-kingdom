@@ -47,7 +47,7 @@ document.body.innerHTML=`
         </h1>
 
         <div class="gameStats">
-            <span>⏱️ <span id="brushTimer">0秒</span></span>
+            <span>⏱️ <span id="brushTimer">00:00</span></span>
             <span>📝 第 <span id="brushAttempt">0</span> 次尝试</span>
         </div>
 

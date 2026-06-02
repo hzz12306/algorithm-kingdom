@@ -93,9 +93,10 @@ function recordGameResult(game, attempts, timeMs, accuracy) {
    ========================== */
 
 function formatTime(ms){
-    const s = Math.floor(ms / 1000);
-    const m = Math.floor(s / 60);
-    return m > 0 ? m + "分" + (s % 60) + "秒" : s + "秒";
+    const totalSec = Math.floor(ms / 1000);
+    const m = Math.floor(totalSec / 60);
+    const s = totalSec % 60;
+    return String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
 }
 
 function calcAccuracy(current, correct){
@@ -111,7 +112,8 @@ function startTimer(displayId, startRef){
     if (window._timer) clearInterval(window._timer);
     window._timer = setInterval(() => {
         el.textContent = formatTime(Date.now() - startRef.value);
-    }, 500);
+    }, 1000);
+    el.textContent = "00:00";
 }
 
 function stopTimer(){

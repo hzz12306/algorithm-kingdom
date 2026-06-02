@@ -47,7 +47,7 @@ document.body.innerHTML=`
         </h1>
 
         <div class="gameStats">
-            <span>⏱️ <span id="libraryTimer">0秒</span></span>
+            <span>⏱️ <span id="libraryTimer">00:00</span></span>
             <span>📝 第 <span id="libraryAttempt">0</span> 次尝试</span>
         </div>
 

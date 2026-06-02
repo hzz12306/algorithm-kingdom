@@ -42,7 +42,7 @@ function renderCookGame(){
         </h1>
 
         <div class="gameStats">
-            <span>⏱️ <span id="cookTimer">0秒</span></span>
+            <span>⏱️ <span id="cookTimer">00:00</span></span>
             <span>📝 第 <span id="cookAttempt">0</span> 次尝试</span>
         </div>
 

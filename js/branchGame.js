@@ -9,6 +9,7 @@ let branchStartTime = { value: 0 };
 function renderBranchGame() {
     branchCompleted = false;
     branchAttempts = 0;
+    branchTimerStarted = false;
     stopTimer();
 
     document.body.innerHTML = `
@@ -19,7 +20,7 @@ function renderBranchGame() {
         <button onclick="goHome()">🏰 返回大厅</button>
         <h1>🚦 算法岔路口</h1>
         <div class="gameStats">
-            <span>⏱️ <span id="branchTimer">0秒</span></span>
+            <span>⏱️ <span id="branchTimer">00:00</span></span>
             <span>📝 第 <span id="branchAttempt">0</span> 次选择</span>
         </div>
     </div>
@@ -64,11 +65,16 @@ function renderBranchGame() {
         document.querySelector(".branchScene .teacherHint").innerHTML +=
             `<br><button onclick="showTaskSheet('branch')" style="margin-top:8px;padding:6px 18px;background:linear-gradient(135deg,#FFA726,#F57C00);color:white;border:none;border-radius:12px;font-size:14px;cursor:pointer">📝 填写任务单</button>`;
     }
-    startTimer("branchTimer", branchStartTime);
     teacherSay("放学了，机器人要走哪条路回家呢？不同的路就是不同的算法哦！");
 }
 
+let branchTimerStarted = false;
+
 function choosePath(type) {
+    if (!branchTimerStarted) {
+        branchTimerStarted = true;
+        startTimer("branchTimer", branchStartTime);
+    }
     branchAttempts++;
     document.getElementById("branchAttempt").textContent = branchAttempts;
     switch (type) {
