@@ -52,55 +52,72 @@ function renderCookGame(){
 
         🤖 小智老师：
 
-        请帮助机器人完成
-        西红柿炒鸡蛋！
+        先来学一学做菜的步骤吧！
 
     </div>
 
-    <div class="characterArea">
+    <div id="cookLearnView">
 
-        <div class="role">
-
-            🍅
-
-            <p>番茄</p>
-
+        <div class="learnSteps">
+            ${cookSteps.map((s, i) => `<div class="learnStep"><span class="learnStepNum">${i+1}</span>${s}</div>`).join("")}
         </div>
 
-        <div class="role">
-
-            🤖
-
-            <p>厨师机器人</p>
-
-        </div>
-
-        <div class="role">
-
-            🥚
-
-            <p>鸡蛋</p>
-
+        <div class="btnArea">
+            <button onclick="cookStartChallenge()">
+            🚀 开始挑战
+            </button>
         </div>
 
     </div>
 
-    <div id="cookCards">
+    <div id="cookChallengeView" style="display:none">
 
-    </div>
+        <div class="characterArea">
 
-    <div class="btnArea">
+            <div class="role">
 
-        <button
-        onclick="checkCookAnswer()">
+                🍅
 
-        ✔ 检查答案
+                <p>番茄</p>
 
-        </button>
+            </div>
 
-    </div>
+            <div class="role">
 
-    <div id="cookResult">
+                🤖
+
+                <p>厨师机器人</p>
+
+            </div>
+
+            <div class="role">
+
+                🥚
+
+                <p>鸡蛋</p>
+
+            </div>
+
+        </div>
+
+        <div id="cookCards">
+
+        </div>
+
+        <div class="btnArea">
+
+            <button
+            onclick="checkCookAnswer()">
+
+            ✔ 检查答案
+
+            </button>
+
+        </div>
+
+        <div id="cookResult">
+
+        </div>
 
     </div>
 
@@ -108,12 +125,16 @@ function renderCookGame(){
 
     `;
 
+    teacherSay("先来学习西红柿炒鸡蛋的正确步骤吧。");
+}
+
+function cookStartChallenge(){
+    document.getElementById("cookLearnView").style.display = "none";
+    document.getElementById("cookChallengeView").style.display = "block";
+    document.querySelector(".cookScene .teacherHint").innerHTML = "🤖 小智老师：请把做菜步骤拖动到正确顺序。";
     createCookCards();
     startTimer("cookTimer", cookStartTime);
-
-    teacherSay(
-        "请把做菜步骤拖动到正确顺序。"
-    );
+    teacherSay("请把做菜步骤拖动到正确顺序。");
 }
 
 /* ==========================

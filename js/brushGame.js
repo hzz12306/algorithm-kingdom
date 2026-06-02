@@ -57,42 +57,60 @@ document.body.innerHTML=`
 
         👩‍🏫 小智老师：
 
-        请帮助机器人完成刷牙步骤！
+        先来学一学刷牙的正确步骤吧！
 
     </div>
 
-    <div class="robotArea">
+    <div id="brushLearnView">
 
-        <div id="robotFace">
+        <div class="learnSteps">
+            ${brushSteps.map((s, i) => `<div class="learnStep"><span class="learnStepNum">${i+1}</span>${s}</div>`).join("")}
+        </div>
 
-            🤖
+        <div class="btnArea">
+            <button onclick="brushStartChallenge()">
+            🚀 开始挑战
+            </button>
+        </div>
+
+    </div>
+
+    <div id="brushChallengeView" style="display:none">
+
+        <div class="robotArea">
+
+            <div id="robotFace">
+
+                🤖
+
+            </div>
+
+            <div id="robotMouth">
+
+                😬
+
+            </div>
 
         </div>
 
-        <div id="robotMouth">
-
-            😬
+        <div id="brushCards">
 
         </div>
 
-    </div>
+        <div class="btnArea">
 
-    <div id="brushCards">
+            <button
+            onclick="checkBrushAnswer()">
 
-    </div>
+            ✔ 检查答案
 
-    <div class="btnArea">
+            </button>
 
-        <button
-        onclick="checkBrushAnswer()">
+        </div>
 
-        ✔ 检查答案
+        <div id="brushResult">
 
-        </button>
-
-    </div>
-
-    <div id="brushResult">
+        </div>
 
     </div>
 
@@ -100,14 +118,16 @@ document.body.innerHTML=`
 
 `;
 
-createBrushCards();
+teacherSay("先来学习刷牙的正确步骤吧。");
+}
 
-teacherSay(
-"请按照正确顺序排列刷牙步骤。"
-);
-
+function brushStartChallenge(){
+    document.getElementById("brushLearnView").style.display = "none";
+    document.getElementById("brushChallengeView").style.display = "block";
+    document.querySelector(".brushScene .teacherHint").innerHTML = "👩‍🏫 小智老师：请按照正确顺序排列刷牙步骤。";
+    createBrushCards();
     startTimer("brushTimer", brushStartTime);
-
+    teacherSay("请按照正确顺序排列刷牙步骤。");
 }
 
 function createBrushCards(){

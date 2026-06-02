@@ -49,52 +49,75 @@ document.body.innerHTML=`
 
         👩‍🏫 小智老师：
 
-        请帮助同学完成借书任务！
+        先来学一学借书的正确步骤吧！
 
     </div>
 
-    <div class="queryPanel">
+    <div id="libraryLearnView">
 
-        <input
-        id="bookInput"
-        placeholder="请输入书名">
+        <div class="learnSteps">
+            ${librarySteps.map((s, i) => `<div class="learnStep"><span class="learnStepNum">${i+1}</span>${s}</div>`).join("")}
+        </div>
 
-        <button onclick="searchBook()">
-
-        🔍 查询
-
-        </button>
-
-    </div>
-
-    <div id="searchResult"></div>
-
-    <div id="libraryMap"></div>
-
-    <div id="libraryCards"></div>
-
-    <div class="btnArea">
-
-        <button
-        onclick="checkLibraryAnswer()">
-
-        ✔ 检查答案
-
-        </button>
+        <div class="btnArea">
+            <button onclick="libraryStartChallenge()">
+            🚀 开始挑战
+            </button>
+        </div>
 
     </div>
 
-    <div id="libraryResult"></div>
+    <div id="libraryChallengeView" style="display:none">
+
+        <div class="queryPanel">
+
+            <input
+            id="bookInput"
+            placeholder="请输入书名">
+
+            <button onclick="searchBook()">
+
+            🔍 查询
+
+            </button>
+
+        </div>
+
+        <div id="searchResult"></div>
+
+        <div id="libraryMap"></div>
+
+        <div id="libraryCards"></div>
+
+        <div class="btnArea">
+
+            <button
+            onclick="checkLibraryAnswer()">
+
+            ✔ 检查答案
+
+            </button>
+
+        </div>
+
+        <div id="libraryResult"></div>
+
+    </div>
 
 </div>
 
 `;
 
-teacherSay(
-"请先查询图书，再完成借书步骤排序。"
-);
+teacherSay("先来学习借书的正确步骤吧。");
+}
 
+function libraryStartChallenge(){
+    document.getElementById("libraryLearnView").style.display = "none";
+    document.getElementById("libraryChallengeView").style.display = "block";
+    document.querySelector(".libraryScene .teacherHint").innerHTML = "👩‍🏫 小智老师：请先查询图书，再完成借书步骤排序。";
     startTimer("libraryTimer", libraryStartTime);
+    teacherSay("请先查询图书，再完成借书步骤排序。");
+}
 
 }
 

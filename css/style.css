@@ -544,6 +544,44 @@ header {
 }
 
 /* =================================
+   学习视图（通用）
+   ================================= */
+.learnSteps {
+    max-width: 500px;
+    width: 90%;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.learnStep {
+    background: white;
+    padding: 14px 20px;
+    border-radius: 14px;
+    font-size: clamp(16px, 2.5vw, 22px);
+    text-align: center;
+    box-shadow: 0 3px 12px rgba(0,0,0,.1);
+    border-left: 4px solid #66BB6A;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+.learnStepNum {
+    display: inline-flex;
+    width: 28px;
+    height: 28px;
+    background: #66BB6A;
+    color: white;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+/* =================================
    游戏1：厨房小厨神
    ================================= */
 .cookScene {
