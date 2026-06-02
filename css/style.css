@@ -1553,4 +1553,128 @@ header {
     gap: 8px;
 }
 
+/* =================================
+   排行榜
+   ================================= */
+#leaderboardBtn {
+    width: 100%;
+    margin-top: 10px;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #E53935, #C62828);
+    border: none;
+    border-radius: 20px;
+    font-size: 15px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(198,40,40,.3);
+}
+.lbOverlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.5);
+    display: flex; justify-content: center; align-items: flex-start;
+    padding: 30px 10px;
+    z-index: 300;
+    overflow-y: auto;
+    animation: fadeIn .3s;
+}
+.lbBox {
+    background: white;
+    border-radius: 24px;
+    padding: 24px 18px 20px;
+    max-width: 680px;
+    width: 94vw;
+    box-shadow: 0 10px 50px rgba(0,0,0,.2);
+    animation: popIn .35s ease;
+}
+.lbBox h1 {
+    text-align: center;
+    font-size: clamp(22px, 4vw, 30px);
+    color: #C62828;
+    margin-bottom: 4px;
+}
+.lbSub {
+    text-align: center;
+    font-size: 14px;
+    color: #999;
+    margin-bottom: 16px;
+}
+.lbEmpty {
+    text-align: center;
+    padding: 40px 20px;
+    font-size: 18px;
+    color: #999;
+    background: #F5F5F5;
+    border-radius: 16px;
+    margin: 10px 0;
+}
+.lbTableWrap {
+    overflow-x: auto;
+    border-radius: 16px;
+    border: 2px solid #F0F0F0;
+}
+.lbTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(14px, 2vw, 16px);
+}
+.lbTable th {
+    background: linear-gradient(135deg, #E53935, #C62828);
+    color: white;
+    padding: 12px 8px;
+    text-align: center;
+    font-weight: bold;
+    white-space: nowrap;
+}
+.lbTable td {
+    padding: 10px 8px;
+    text-align: center;
+    border-bottom: 1px solid #F0F0F0;
+}
+.lbRow.lbTop { background: #FFF8E1; }
+.lbRow.lbTop1 td:first-child { font-size: 28px; }
+.lbRow.lbTop2 td:first-child { font-size: 24px; }
+.lbRow.lbTop3 td:first-child { font-size: 22px; }
+.lbRow:hover { background: #F5F5F5; }
+.lbRank { font-size: 20px; min-width: 50px; }
+.lbName { font-weight: bold; color: #333; }
+.lbScore { font-weight: bold; color: #E65100; font-size: 18px; }
+.lbGrade { color: #555; }
+.lbDate { color: #999; font-size: 13px; }
+.lbCount {
+    text-align: center;
+    font-size: 13px;
+    color: #999;
+    margin-top: 10px;
+}
+.lbBtns {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+.lbCloseBtn {
+    padding: 12px 36px;
+    background: linear-gradient(135deg, #FFD700, #FFA000);
+    border: none;
+    border-radius: 25px;
+    font-size: 17px;
+    font-weight: bold;
+    color: #333;
+    box-shadow: 0 4px 15px rgba(255,160,0,.35);
+    cursor: pointer;
+}
+.lbClearBtn {
+    padding: 12px 24px;
+    background: #FFEBEE;
+    border: 2px solid #EF9A9A;
+    border-radius: 25px;
+    font-size: 15px;
+    color: #C62828;
+    cursor: pointer;
+    transition: background .2s;
+}
+.lbClearBtn:hover { background: #FFCDD2; }
+
 

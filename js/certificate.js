@@ -202,6 +202,9 @@ function generateCertificate() {
     ctx.textAlign = "center";
     ctx.fillText(badgeEmojis[level], W - 100, 130);
 
+    if (typeof saveToLeaderboard === "function" && level > 0) {
+        saveToLeaderboard(name, scores.total, level);
+    }
     teacherSay("恭喜" + name + "获得" + levelTitles[level] + "证书！");
 }
 
