@@ -1,27 +1,35 @@
 /* ==========================
    图书馆小达人
-========================== */
+   ========================== */
 
 const librarySteps = [
-
-"进入图书馆",
-"查找图书",
-"记录书架号",
-"取书",
-"办理借书手续",
-"离开图书馆"
-
+    "进入图书馆",
+    "查找图书",
+    "记录书架号",
+    "取书",
+    "办理借书手续",
+    "离开图书馆"
 ];
 
 let libraryCompleted = false;
 let libraryAttempts = 0;
 let libraryStartTime = { value: 0 };
 let libraryBestAccuracy = 0;
+let bookZone = "", bookRow = 0, bookShelf = 0;
+let cardsRevealed = false;
+const ZONES = ["A区", "B区", "C区"];
+
+function generateBookLocation() {
+    bookZone = ZONES[Math.floor(Math.random() * 3)];
+    bookRow = Math.floor(Math.random() * 5) + 1;
+    bookShelf = Math.floor(Math.random() * 8) + 1;
+}
 
 function renderLibraryGame(){
     libraryCompleted = false;
     libraryAttempts = 0;
     libraryBestAccuracy = 0;
+    cardsRevealed = false;
     stopTimer();
 
 document.body.innerHTML=`
@@ -87,9 +95,9 @@ document.body.innerHTML=`
 
         <div id="libraryMap"></div>
 
-        <div id="libraryCards"></div>
+        <div id="libraryCards" style="display:none"></div>
 
-        <div class="btnArea">
+        <div class="btnArea" id="libraryCheckArea" style="display:none">
 
             <button
             onclick="checkLibraryAnswer()">
@@ -122,9 +130,9 @@ teacherSay("先来学习借书的正确步骤吧。");
 function libraryStartChallenge(){
     document.getElementById("libraryLearnView").style.display = "none";
     document.getElementById("libraryChallengeView").style.display = "block";
-    document.querySelector(".libraryScene .teacherHint").innerHTML = "👩‍🏫 小智老师：请先查询图书，再完成借书步骤排序。";
+    document.querySelector(".libraryScene .teacherHint").innerHTML = "👩‍🏫 小智老师：请先查询图书，再前往对应书架取书。";
     startTimer("libraryTimer", libraryStartTime);
-    teacherSay("请先查询图书，再完成借书步骤排序。");
+    teacherSay("请先查询图书，再前往对应书架取书。");
 }
 
 function searchBook(){
@@ -141,6 +149,9 @@ alert("请输入书名");
 return;
 
 }
+
+generateBookLocation();
+cardsRevealed = false;
 
 document
 .getElementById(
@@ -162,17 +173,19 @@ ${name}
 
 位置：
 
-A区 3排 5号
+${bookZone} ${bookRow}排 ${bookShelf}号
 
 </div>
 `;
 
+document.getElementById("libraryCards").style.display = "none";
+document.getElementById("libraryCheckArea").style.display = "none";
+document.getElementById("libraryResult").innerHTML = "";
+
 renderMap();
 
-renderLibraryCards();
-
 teacherSay(
-"请前往A区找到图书。"
+"请前往" + bookZone + "找到图书。"
 );
 
 }
@@ -189,15 +202,15 @@ document
 `
 <div class="map">
 
-<div class="shelf">
+<div class="shelf" id="zoneA">
 A区
 </div>
 
-<div class="shelf">
+<div class="shelf" id="zoneB">
 B区
 </div>
 
-<div class="shelf">
+<div class="shelf" id="zoneC">
 C区
 </div>
 
@@ -221,51 +234,61 @@ C区
 
 `;
 
-window.playerPos=0;
+window.playerPos = 1;
+updateZoneHighlight();
+document.getElementById("player").style.left = (100 + 1 * 220) + "px";
 
+}
+
+function updateZoneHighlight() {
+    const targetIdx = ZONES.indexOf(bookZone);
+    ZONES.forEach((z, i) => {
+        const el = document.getElementById("zone" + z.charAt(0));
+        if (el) {
+            el.style.background = (i === targetIdx && i === window.playerPos)
+                ? "linear-gradient(135deg, #FFD700, #FFA000)"
+                : (i === window.playerPos ? "linear-gradient(135deg, #A5D6A7, #66BB6A)" : "");
+            el.style.transform = (i === targetIdx && i === window.playerPos) ? "scale(1.1)" : "scale(1)";
+            el.style.color = (i === window.playerPos) ? "white" : "";
+            el.style.boxShadow = (i === targetIdx && i === window.playerPos)
+                ? "0 0 20px rgba(255,215,0,.6)" : "";
+        }
+    });
 }
 
 function movePlayer(dir){
 
-const player=
+const player =
 document.getElementById(
 "player"
 );
 
-if(dir==="left"){
+if(dir === "left") playerPos--;
+if(dir === "right") playerPos++;
 
-playerPos--;
+if(playerPos < 0) playerPos = 0;
+if(playerPos > 2) playerPos = 2;
 
-}
+player.style.left = (100 + playerPos * 220) + "px";
+updateZoneHighlight();
 
-if(dir==="right"){
-
-playerPos++;
-
-}
-
-if(playerPos<0)
-playerPos=0;
-
-if(playerPos>2)
-playerPos=2;
-
-player.style.left=
-(100+playerPos*220)+"px";
-
-if(playerPos===0){
-
-teacherSay(
-"恭喜找到A区书架！"
-);
-
+if (ZONES[playerPos] === bookZone) {
+    teacherSay("✅ 到达" + bookZone + "！请正确排列借书步骤。");
+    if (!cardsRevealed) {
+        cardsRevealed = true;
+        renderLibraryCards();
+        document.getElementById("libraryCards").style.display = "block";
+        document.getElementById("libraryCheckArea").style.display = "block";
+    }
+} else {
+    teacherSay("当前在" + ZONES[playerPos] + "，继续寻找" + bookZone);
 }
 
 }
 
 function renderLibraryCards(){
 
-const shuffled=[
+const shuffled = [
 
 "办理借书手续",
 "进入图书馆",
@@ -276,23 +299,23 @@ const shuffled=[
 
 ];
 
-const box=
+const box =
 document.getElementById(
 "libraryCards"
 );
 
-box.innerHTML="";
+box.innerHTML = "";
 
-shuffled.forEach(step=>{
+shuffled.forEach(step => {
 
-const div=
+const div =
 document.createElement(
 "div"
 );
 
-div.className="libraryCard";
+div.className = "libraryCard";
 
-div.innerText=step;
+div.innerText = step;
 
 box.appendChild(div);
 
@@ -308,23 +331,28 @@ function initLibraryDrag(){
 
 function checkLibraryAnswer(){
 
+if (ZONES[playerPos] !== bookZone) {
+    teacherSay("还没有到达" + bookZone + "，先移动👧到正确位置吧！");
+    return;
+}
+
 libraryAttempts++;
 document.getElementById("libraryAttempt").textContent = libraryAttempts;
 
-const current=[
+const current = [
 
 ...document.querySelectorAll(
 ".libraryCard"
 )
 
 ].map(
-x=>x.innerText
+x => x.innerText
 );
 
 const acc = calcAccuracy(current, librarySteps);
 if (acc > libraryBestAccuracy) libraryBestAccuracy = acc;
 
-if(
+if (
 
 JSON.stringify(current)
 ===
@@ -421,8 +449,7 @@ teacherSay(
 
 document
 .getElementById(
-"libraryResult"
-)
+"libraryResult")
 
 .innerHTML=
 
