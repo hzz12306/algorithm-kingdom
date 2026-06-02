@@ -377,8 +377,8 @@ function renderTaskReview(gameId, data) {
                 return `<div class="${cls}" style="pointer-events:none">${opt}</div>`;
             }).join("")}
           </div>
-        </div>`;
-        }).join("");
+        </div>`
+        ).join("");
     }
     return sheet.questions.map((q, qi) => {
         const isCorrect = data.correct[qi];
@@ -466,6 +466,8 @@ function renderSelfEvalSection() {
 function showSelfEval() {
     showTaskSheet("selfEval");
 }
+
+function closeGrowthRecord() {
     const m = document.getElementById("growthRecordModal");
     if (m) m.remove();
 }
