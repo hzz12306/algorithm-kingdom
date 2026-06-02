@@ -4,7 +4,13 @@
 
 function getGameStats() {
     const saved = sessionStorage.getItem("gameStats");
-    if (saved) return JSON.parse(saved);
+    if (saved) {
+        const data = JSON.parse(saved);
+        ["cook","library","brush","branch"].forEach(k => {
+            if (data[k] && data[k].bestTime == null) data[k].bestTime = Infinity;
+        });
+        return data;
+    }
     return {
         cook: { attempts: 0, bestTime: Infinity, bestAccuracy: 0, completed: false },
         library: { attempts: 0, bestTime: Infinity, bestAccuracy: 0, completed: false },
@@ -20,7 +26,7 @@ function saveGameStats(game, data) {
 
     // 更新总计
     stats.total.attempts = stats.cook.attempts + stats.library.attempts + stats.brush.attempts + stats.branch.attempts;
-    const t = (s) => (s.bestTime == null || s.bestTime === Infinity) ? 0 : s.bestTime;
+    const t = (s) => (s == null || s.bestTime == null || s.bestTime === Infinity) ? 0 : s.bestTime;
     stats.total.time = t(stats.cook) + t(stats.library) + t(stats.brush) + t(stats.branch);
     stats.total.completed = (stats.cook.completed ? 1 : 0)
                           + (stats.library.completed ? 1 : 0)
@@ -76,7 +82,7 @@ function recordGameResult(game, attempts, timeMs, accuracy) {
     const stats = getGameStats();
     const g = stats[game];
     g.attempts = attempts;
-    if (timeMs < g.bestTime) g.bestTime = timeMs;
+    if (g.bestTime == null || g.bestTime === Infinity || timeMs < g.bestTime) g.bestTime = timeMs;
     if (accuracy > g.bestAccuracy) g.bestAccuracy = accuracy;
     g.completed = true;
     saveGameStats(game, g);
