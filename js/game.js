@@ -4,7 +4,14 @@
 
 function getGameStats() {
     const saved = sessionStorage.getItem("gameStats");
-    if (saved) return JSON.parse(saved);
+    if (saved) {
+        const data = JSON.parse(saved);
+        // JSON 不支持 Infinity，还原 null 为 Infinity
+        ["cook","library","brush","branch"].forEach(k => {
+            if (data[k] && data[k].bestTime == null) data[k].bestTime = Infinity;
+        });
+        return data;
+    }
     return {
         cook: { attempts: 0, bestTime: Infinity, bestAccuracy: 0, completed: false },
         library: { attempts: 0, bestTime: Infinity, bestAccuracy: 0, completed: false },
@@ -20,10 +27,8 @@ function saveGameStats(game, data) {
 
     // 更新总计
     stats.total.attempts = stats.cook.attempts + stats.library.attempts + stats.brush.attempts + stats.branch.attempts;
-    stats.total.time = (stats.cook.bestTime === Infinity ? 0 : stats.cook.bestTime)
-                     + (stats.library.bestTime === Infinity ? 0 : stats.library.bestTime)
-                     + (stats.brush.bestTime === Infinity ? 0 : stats.brush.bestTime)
-                     + (stats.branch.bestTime === Infinity ? 0 : stats.branch.bestTime);
+    const t = (s) => (s.bestTime == null || s.bestTime === Infinity) ? 0 : s.bestTime;
+    stats.total.time = t(stats.cook) + t(stats.library) + t(stats.brush) + t(stats.branch);
     stats.total.completed = (stats.cook.completed ? 1 : 0)
                           + (stats.library.completed ? 1 : 0)
                           + (stats.brush.completed ? 1 : 0)
@@ -38,7 +43,7 @@ function updateStatsPanel() {
     const panel = document.getElementById("statsPanel");
     if (!panel) return;
 
-    const formatBestTime = (t) => t === Infinity ? "--" : formatTime(t);
+    const formatBestTime = (t) => (t == null || t === Infinity) ? "--" : formatTime(t);
     const totalGames = 4;
     const progress = Math.round(stats.total.completed / totalGames * 100);
 
