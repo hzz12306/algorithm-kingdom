@@ -127,8 +127,6 @@ function libraryStartChallenge(){
     teacherSay("请先查询图书，再完成借书步骤排序。");
 }
 
-}
-
 function searchBook(){
 
 const name =
