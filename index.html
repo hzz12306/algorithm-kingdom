@@ -36,7 +36,10 @@
         算法就是完成任务的一系列步骤哦！<br>
         选一个游戏开始挑战吧！
       </div>
-      <button class="teacherVoiceBtn" onclick="welcomeSpeak()">🔊 听讲解</button>
+      <div class="teacherBtns">
+        <button class="teacherVoiceBtn" onclick="welcomeSpeak()">🔊 听讲解</button>
+        <button class="teacherVoiceBtn" onclick="showProfileModal(false)" style="background:linear-gradient(135deg,#FF7043,#E64A19)">👤 填写信息</button>
+      </div>
     </div>
     <div class="heroRight">
       <div class="heroCastle">🏰</div>
@@ -82,6 +85,11 @@
 
     <!-- 右侧：信息面板 -->
     <aside class="sidePanel">
+      <div id="profilePanel">
+        <div class="profilePanelHeader">👤 个人信息</div>
+        <div id="profileDisplay"></div>
+        <button id="studentProfileBtn" onclick="editProfile()" style="display:none;width:100%;padding:6px 10px;background:#E3F2FD;border:none;border-radius:10px;font-size:13px;cursor:pointer">修改信息</button>
+      </div>
 
       <!-- 成就 + 数据统计 -->
       <div id="achievement">
@@ -106,6 +114,10 @@
             <div class="statItem"><span>🎯 最佳准确率</span><strong>0%</strong></div>
           </div>
           <div class="statDivider"></div>
+          <div id="scoreSummary" style="margin-bottom:10px">
+            <div class="statItem"><span>⭐ 总积分</span><strong id="totalScoreDisplay">0/200</strong></div>
+            <div class="statItem"><span>🏅 证书等级</span><strong id="levelDisplay">--</strong></div>
+          </div>
           <div class="statMini">
             <div>🍅 厨房 <span id="statCook">⏳ --</span></div>
             <div>📚 图书馆 <span id="statLibrary">⏳ --</span></div>
@@ -169,6 +181,14 @@ function openGame(type){
 window.onload=()=>{
   loadAchievements();
   updateStatsPanel();
+  const profile = getStudentProfile ? getStudentProfile() : null;
+  if (profile) {
+    const d = document.getElementById("profileDisplay");
+    if (d) d.textContent = profile.name + (profile.className ? " · " + profile.className : "");
+    document.getElementById("studentProfileBtn").style.display = "inline-block";
+  } else {
+    setTimeout(() => showProfileModal(true), 800);
+  }
   setTimeout(welcomeSpeak, 1000);
 }
 

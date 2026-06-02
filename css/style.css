@@ -1311,4 +1311,246 @@ header {
     box-shadow: 0 6px 20px rgba(0,0,0,.12);
 }
 
+/* =================================
+   个人信息
+   ================================= */
+#profilePanel {
+    background: white;
+    border-radius: 20px;
+    padding: 14px 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,.1);
+    text-align: center;
+}
+.profilePanelHeader {
+    font-size: 15px;
+    color: #666;
+    margin-bottom: 6px;
+}
+#profileDisplay {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    min-height: 24px;
+}
+.teacherBtns {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* =================================
+   学生信息弹窗
+   ================================= */
+.profileOverlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.45);
+    display: flex; justify-content: center; align-items: center;
+    z-index: 300;
+    animation: fadeIn .3s;
+}
+.profileBox {
+    background: white;
+    border-radius: 24px;
+    padding: 32px 28px 24px;
+    max-width: 400px;
+    width: 88vw;
+    text-align: center;
+    box-shadow: 0 15px 60px rgba(0,0,0,.25);
+    animation: popIn .4s ease;
+}
+.profileHeader {
+    font-size: clamp(22px, 4vw, 28px);
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 6px;
+}
+.profileSub {
+    font-size: 15px;
+    color: #888;
+    margin-bottom: 20px;
+}
+.profileField {
+    margin-bottom: 14px;
+    text-align: left;
+}
+.profileField label {
+    display: block;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 4px;
+    font-weight: bold;
+}
+.profileField input {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 16px;
+    border: 2px solid #E0E0E0;
+    border-radius: 12px;
+    outline: none;
+    transition: border-color .3s;
+    box-sizing: border-box;
+}
+.profileField input:focus {
+    border-color: #66BB6A;
+}
+.profileBtn {
+    margin-top: 10px;
+    padding: 12px 36px;
+    background: linear-gradient(135deg, #66BB6A, #43A047);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(76,175,80,.35);
+    display: inline-block;
+}
+.profileBtn.cancelBtn {
+    background: #E0E0E0;
+    color: #666;
+    box-shadow: none;
+    margin-left: 10px;
+}
+
+/* =================================
+   积分显示
+   ================================= */
+#scoreSummary {
+    background: #FFF8E1;
+    border-radius: 12px;
+    padding: 8px;
+}
+#scoreSummary .statItem {
+    background: transparent;
+    padding: 4px 8px;
+}
+#totalScoreDisplay {
+    font-size: 18px;
+}
+#levelDisplay {
+    font-size: 16px;
+}
+
+/* =================================
+   成长记录册增强
+   ================================= */
+.growthDetail {
+    margin-top: 8px;
+}
+.growthRow {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 8px;
+    font-size: 14px;
+    color: #555;
+    background: rgba(255,255,255,.6);
+    border-radius: 6px;
+    margin-bottom: 4px;
+}
+.growthSubTotal {
+    text-align: center;
+    font-size: 15px;
+    color: #E65100;
+    margin-top: 6px;
+    padding: 6px;
+    background: #FFF8E1;
+    border-radius: 10px;
+}
+.growthSummaryBox {
+    margin-top: 14px;
+    padding: 16px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,.06);
+}
+.growthSummaryRow {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 8px;
+    font-size: 15px;
+    color: #555;
+    border-bottom: 1px solid #F0F0F0;
+}
+.growthSummaryTotal {
+    text-align: center;
+    font-size: 22px;
+    padding: 12px;
+    margin: 8px 0;
+    background: linear-gradient(135deg, #FFF8E1, #FFE082);
+    border-radius: 14px;
+}
+.growthSummaryTotal strong {
+    color: #E65100;
+    font-size: 28px;
+}
+.growthLevel {
+    text-align: center;
+    padding: 14px;
+    margin-top: 10px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+.growthLevelDetail {
+    text-align: center;
+    font-size: 15px;
+    color: #666;
+    margin-top: 8px;
+    line-height: 1.6;
+    padding: 8px;
+}
+.growthCertBtn {
+    display: block;
+    width: 100%;
+    margin-top: 12px;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #FFD700, #FFA000);
+    border: none;
+    border-radius: 20px;
+    font-size: 17px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255,160,0,.35);
+    transition: transform .2s;
+}
+.growthCertBtn:hover {
+    transform: scale(1.03);
+}
+
+/* =================================
+   三级证书
+   ================================= */
+.certLevelSelect {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 16px 0;
+    flex-wrap: wrap;
+}
+.certLevelTab {
+    padding: 10px 24px;
+    border: 2px solid #E0E0E0;
+    border-radius: 20px;
+    background: white;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all .3s;
+}
+.certLevelTab.active {
+    border-color: transparent;
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0,0,0,.12);
+}
+.certActions {
+    margin-top: 16px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
 
