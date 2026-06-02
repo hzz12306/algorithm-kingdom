@@ -41,7 +41,6 @@ function updateStatsPanel() {
     const panel = document.getElementById("statsPanel");
     if (!panel) return;
 
-    const formatBestTime = (t) => (t == null || t === Infinity) ? "--" : formatTime(t);
     const totalGames = 4;
     const progress = Math.round(stats.total.completed / totalGames * 100);
 
@@ -68,9 +67,15 @@ function updateStatsPanel() {
         }
     }
 
-    function setStat(id, completed, time) {
-        const el = document.getElementById(id);
-        if (el) el.textContent = (completed ? "✅ " : "⏳ ") + formatBestTime(time);
+    function setStat(statId, completed, time) {
+        const el = document.getElementById(statId);
+        if (el) {
+            el.textContent = completed ? ("⏱ " + formatTime(time)) : "⏳ --";
+            el.style.color = completed ? "#2E7D32" : "#999";
+        }
+        const rowMap = { statCook: "gsCook", statLibrary: "gsLibrary", statBrush: "gsBrush", statBranch: "gsBranch" };
+        const row = document.getElementById(rowMap[statId]);
+        if (row) row.className = "gameStatRow" + (completed ? " gsDone" : "");
     }
     setStat("statCook", stats.cook.completed, stats.cook.bestTime);
     setStat("statLibrary", stats.library.completed, stats.library.bestTime);

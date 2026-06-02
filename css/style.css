@@ -388,18 +388,34 @@ header {
 }
 .statMiniCompact {
     display: flex;
-    justify-content: space-around;
-    gap: 2px;
-    font-size: 12px;
-    color: #888;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 6px;
 }
-.statMiniCompact span {
-    text-align: center;
-    padding: 3px 4px;
+.gameStatRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
     background: #FAFAFA;
-    border-radius: 6px;
-    flex: 1;
-    white-space: nowrap;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #555;
+    transition: background .3s;
+}
+.gameStatRow.gsDone {
+    background: #E8F5E9;
+}
+.gsRight {
+    font-weight: bold;
+    font-family: "Courier New", monospace;
+    font-size: 14px;
+    min-width: 72px;
+    text-align: right;
+    color: #333;
+}
+.gameStatRow.gsDone .gsRight {
+    color: #2E7D32;
 }
 
 /* ---- 底部 ---- */
