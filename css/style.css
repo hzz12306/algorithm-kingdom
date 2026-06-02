@@ -237,49 +237,90 @@ header {
 
 /* ---- 右侧面板 ---- */
 .sidePanel {
-    width: 280px;
+    width: 260px;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 10px;
 }
+
+.btnRow {
+    display: flex;
+    gap: 8px;
+}
+.sideBtn {
+    flex: 1;
+    padding: 10px 6px;
+    border: none;
+    border-radius: 14px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform .2s;
+    text-align: center;
+}
+.sideBtn:first-child {
+    background: linear-gradient(135deg, #7E57C2, #5E35B1);
+    color: white;
+    box-shadow: 0 3px 10px rgba(94,53,177,.25);
+}
+.sideBtn:last-child {
+    background: linear-gradient(135deg, #E53935, #C62828);
+    color: white;
+    box-shadow: 0 3px 10px rgba(198,40,40,.25);
+}
+.sideBtn:hover { transform: scale(1.04); }
+.sideBtn:active { transform: scale(.97); }
 
 #achievement {
     background: white;
-    border-radius: 20px;
-    padding: 16px 16px 8px;
+    border-radius: 16px;
+    padding: 12px 14px 10px;
     box-shadow: 0 4px 20px rgba(0,0,0,.1);
+}
+
+.achieveTop {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+.profileMini {
+    font-size: 14px;
+    color: #666;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+#studentProfileBtn {
+    flex-shrink: 0;
+    padding: 3px 12px;
+    background: #E3F2FD;
+    border: none;
+    border-radius: 10px;
+    font-size: 12px;
+    color: #1565C0;
+    cursor: pointer;
 }
 
 #achievement h2 {
     text-align: center;
-    margin-bottom: 12px;
-    font-size: 17px;
+    margin-bottom: 8px;
+    font-size: 15px;
     color: #555;
 }
 
-.achieveDivider {
-    height: 1px;
-    background: #E8E8E8;
-    margin: 14px 0 10px;
+.badgeGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 8px;
 }
-
-#statsPanel {
-    padding: 0;
-}
-#statsPanel h3 {
-    text-align: center;
-    margin-bottom: 10px;
-    font-size: 15px;
-    color: #666;
-}
-
 .badge {
-    margin: 8px 0;
-    padding: 8px 12px;
+    padding: 6px 6px;
     background: #FFF8E1;
     border-radius: 10px;
-    font-size: 14px;
+    font-size: 12px;
     text-align: center;
     transition: background .3s, transform .3s;
 }
@@ -287,86 +328,78 @@ header {
 #certificateBtn {
     display: none;
     width: 100%;
-    margin-top: 12px;
-    padding: 10px 16px;
+    margin-bottom: 8px;
+    padding: 8px 14px;
     background: linear-gradient(135deg, #FFD700, #FFA000);
     border: none;
-    border-radius: 20px;
-    font-size: 15px;
+    border-radius: 16px;
+    font-size: 14px;
     font-weight: bold;
     color: #333;
     cursor: pointer;
     box-shadow: 0 3px 12px rgba(255,160,0,.35);
 }
-#growthRecordBtn {
-    width: 100%;
-    margin-top: 10px;
-    padding: 12px 16px;
-    background: linear-gradient(135deg, #7E57C2, #5E35B1);
-    border: none;
-    border-radius: 20px;
-    font-size: 15px;
-    font-weight: bold;
-    color: white;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(94,53,177,.3);
-}
 
 /* ---- 统计数据 ---- */
+#statsPanel {
+    padding: 0;
+}
 .statProgress {
     position: relative;
-    height: 24px;
+    height: 20px;
     background: #E8F5E9;
-    border-radius: 12px;
+    border-radius: 10px;
     overflow: hidden;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
 }
 .statProgressBar {
     height: 100%;
     background: linear-gradient(90deg, #66BB6A, #43A047);
-    border-radius: 12px;
+    border-radius: 10px;
     transition: width .6s ease;
 }
 .statProgress span {
     position: absolute;
     top: 0; left: 0; right: 0;
     text-align: center;
-    line-height: 24px;
-    font-size: 12px;
+    line-height: 20px;
+    font-size: 11px;
     color: #333;
     font-weight: bold;
 }
-.statList {
+.statRowCompact {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-bottom: 10px;
+    justify-content: space-around;
+    gap: 4px;
+    margin-bottom: 6px;
 }
-.statItem {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 6px 10px;
+.statRowCompact span {
+    flex: 1;
+    text-align: center;
+    font-size: 12px;
+    color: #666;
+    padding: 4px 2px;
     background: #F5F5F5;
     border-radius: 8px;
-    font-size: 13px;
 }
-.statItem strong {
+.statRowCompact strong {
     color: #2E7D32;
-}
-.statDivider {
-    height: 1px;
-    background: #E0E0E0;
-    margin: 10px 0;
-}
-.statMini {
     font-size: 13px;
-    color: #666;
-    line-height: 1.8;
 }
-.statMini div {
+.statMiniCompact {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
+    gap: 2px;
+    font-size: 12px;
+    color: #888;
+}
+.statMiniCompact span {
+    text-align: center;
+    padding: 3px 4px;
+    background: #FAFAFA;
+    border-radius: 6px;
+    flex: 1;
+    white-space: nowrap;
 }
 
 /* ---- 底部 ---- */
@@ -1314,23 +1347,9 @@ header {
 /* =================================
    个人信息
    ================================= */
-#profilePanel {
-    background: white;
-    border-radius: 20px;
-    padding: 14px 16px;
-    box-shadow: 0 4px 20px rgba(0,0,0,.1);
-    text-align: center;
-}
-.profilePanelHeader {
-    font-size: 15px;
-    color: #666;
-    margin-bottom: 6px;
-}
 #profileDisplay {
-    font-size: 16px;
     font-weight: bold;
     color: #333;
-    min-height: 24px;
 }
 .teacherBtns {
     display: flex;
@@ -1416,20 +1435,11 @@ header {
 /* =================================
    积分显示
    ================================= */
-#scoreSummary {
-    background: #FFF8E1;
-    border-radius: 12px;
-    padding: 8px;
-}
-#scoreSummary .statItem {
-    background: transparent;
-    padding: 4px 8px;
-}
 #totalScoreDisplay {
-    font-size: 18px;
+    font-size: 14px;
 }
 #levelDisplay {
-    font-size: 16px;
+    font-size: 14px;
 }
 
 /* =================================
@@ -1556,19 +1566,6 @@ header {
 /* =================================
    排行榜
    ================================= */
-#leaderboardBtn {
-    width: 100%;
-    margin-top: 10px;
-    padding: 12px 16px;
-    background: linear-gradient(135deg, #E53935, #C62828);
-    border: none;
-    border-radius: 20px;
-    font-size: 15px;
-    font-weight: bold;
-    color: white;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(198,40,40,.3);
-}
 .lbOverlay {
     position: fixed; inset: 0;
     background: rgba(0,0,0,.5);

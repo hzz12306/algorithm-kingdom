@@ -50,7 +50,7 @@ function updateStatsPanel() {
     if (bar) bar.style.width = progress + "%";
     if (label) label.textContent = "完成进度 " + stats.total.completed + "/" + totalGames;
 
-    const items = panel.querySelectorAll(".statList .statItem strong");
+    const items = panel.querySelectorAll(".statRowCompact strong");
     if (items[0]) items[0].textContent = stats.total.attempts + " 次";
     if (items[1]) items[1].textContent = formatTime(stats.total.time);
     if (items[2]) items[2].textContent = Math.max(stats.cook.bestAccuracy, stats.library.bestAccuracy, stats.brush.bestAccuracy) + "%";
@@ -533,7 +533,8 @@ function saveStudentProfile(name, className) {
     sessionStorage.setItem("studentProfile", JSON.stringify({ name, className }));
     const d = document.getElementById("profileDisplay");
     if (d) d.textContent = name ? name + (className ? " · " + className : "") : "";
-    document.getElementById("studentProfileBtn").style.display = name ? "inline-block" : "none";
+    const btn = document.getElementById("studentProfileBtn");
+    if (btn) btn.style.display = name ? "" : "none";
 }
 
 function showProfileModal(firstTime) {

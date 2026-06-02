@@ -85,50 +85,48 @@
 
     <!-- 右侧：信息面板 -->
     <aside class="sidePanel">
-      <div id="profilePanel">
-        <div class="profilePanelHeader">👤 个人信息</div>
-        <div id="profileDisplay"></div>
-        <button id="studentProfileBtn" onclick="editProfile()" style="display:none;width:100%;padding:6px 10px;background:#E3F2FD;border:none;border-radius:10px;font-size:13px;cursor:pointer">修改信息</button>
-      </div>
 
-      <!-- 成就 + 数据统计 -->
       <div id="achievement">
-        <h2>🏆 我的成就</h2>
-        <div class="badge">⚪ 厨房达人</div>
-        <div class="badge">⚪ 借书达人</div>
-        <div class="badge">⚪ 刷牙达人</div>
-        <div class="badge">⚪ 分支达人</div>
+        <div class="achieveTop">
+          <span class="profileMini">👤 <span id="profileDisplay"></span></span>
+          <button id="studentProfileBtn" onclick="editProfile()" style="display:none">修改</button>
+        </div>
+        <h2>🏆 成就</h2>
+        <div class="badgeGrid">
+          <div class="badge">⚪ 厨房达人</div>
+          <div class="badge">⚪ 借书达人</div>
+          <div class="badge">⚪ 刷牙达人</div>
+          <div class="badge">⚪ 分支达人</div>
+        </div>
         <button id="certificateBtn" onclick="renderCertificate()" style="display:none">🎓 领取证书</button>
 
-        <div class="achieveDivider"></div>
-
         <div id="statsPanel">
-          <h3>📊 游戏数据</h3>
           <div class="statProgress">
             <div class="statProgressBar" style="width:0%"></div>
             <span>完成进度 0/4</span>
           </div>
-          <div class="statList">
-            <div class="statItem"><span>📝 总尝试</span><strong>0 次</strong></div>
-            <div class="statItem"><span>⏱️ 总用时</span><strong>0秒</strong></div>
-            <div class="statItem"><span>🎯 最佳准确率</span><strong>0%</strong></div>
+          <div class="statRowCompact">
+            <span>📝 <strong>0 次</strong></span>
+            <span>⏱️ <strong>0秒</strong></span>
+            <span>🎯 <strong>0%</strong></span>
           </div>
-          <div class="statDivider"></div>
-          <div id="scoreSummary" style="margin-bottom:10px">
-            <div class="statItem"><span>⭐ 总积分</span><strong id="totalScoreDisplay">0/200</strong></div>
-            <div class="statItem"><span>🏅 证书等级</span><strong id="levelDisplay">--</strong></div>
+          <div class="statRowCompact">
+            <span>⭐ <strong id="totalScoreDisplay">0/200</strong></span>
+            <span>🏅 <strong id="levelDisplay">--</strong></span>
           </div>
-          <div class="statMini">
-            <div>🍅 厨房 <span id="statCook">⏳ --</span></div>
-            <div>📚 图书馆 <span id="statLibrary">⏳ --</span></div>
-            <div>🪥 刷牙 <span id="statBrush">⏳ --</span></div>
-            <div>🚦 岔路口 <span id="statBranch">⏳ --</span></div>
+          <div class="statMiniCompact">
+            <span>🍅 <span id="statCook">⏳</span></span>
+            <span>📚 <span id="statLibrary">⏳</span></span>
+            <span>🪥 <span id="statBrush">⏳</span></span>
+            <span>🚦 <span id="statBranch">⏳</span></span>
           </div>
         </div>
       </div>
 
-      <button id="growthRecordBtn" onclick="renderGrowthRecord()">📒 我的成长记录册</button>
-      <button id="leaderboardBtn" onclick="showLeaderboard()">📊 排行榜</button>
+      <div class="btnRow">
+        <button class="sideBtn" onclick="renderGrowthRecord()">📒 成长记录</button>
+        <button class="sideBtn" onclick="showLeaderboard()">📊 排行榜</button>
+      </div>
 
     </aside>
 
@@ -186,7 +184,7 @@ window.onload=()=>{
   if (profile) {
     const d = document.getElementById("profileDisplay");
     if (d) d.textContent = profile.name + (profile.className ? " · " + profile.className : "");
-    document.getElementById("studentProfileBtn").style.display = "inline-block";
+    document.getElementById("studentProfileBtn").style.display = "";
   } else {
     setTimeout(() => showProfileModal(true), 800);
   }
