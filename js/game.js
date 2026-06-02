@@ -414,8 +414,10 @@ function closeTaskSheet() {
 }
 
 function renderGrowthRecord() {
-    const results = getTaskResults();
-    const totalStars = Object.values(results).reduce((s, r) => s + r.score, 0);
+    const raw = getTaskResults();
+    const results = {};
+    Object.keys(raw).filter(k => k !== '_version').forEach(k => results[k] = raw[k]);
+    const totalStars = Object.values(results).reduce((s, r) => s + (r.score || 0), 0);
     const totalPossible = Object.values(taskSheets).reduce((sum, s) => sum + s.questions.length, 0);
     const m = document.createElement("div");
     m.id = "growthRecordModal";
