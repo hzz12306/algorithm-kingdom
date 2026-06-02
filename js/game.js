@@ -307,12 +307,14 @@ function saveTaskResult(gameId, answers) {
 }
 
 let _taskQIndex = 0;
+let _taskAnswers = {};
 
 function showTaskSheet(gameId) {
     const sheet = taskSheets[gameId];
     if (!sheet) return;
     const existing = getTaskResults()[gameId];
     _taskQIndex = 0;
+    _taskAnswers = {};
     const modal = document.createElement("div");
     modal.id = "taskSheetModal";
     modal.innerHTML = `
@@ -377,14 +379,13 @@ function renderTaskQuestion(gameId) {
 
 function selectTaskAnswer(gameId, optIdx) {
     const sheet = taskSheets[gameId];
-    const results = getTaskResults();
-    const _answers = results[gameId] ? results[gameId].answers.slice() : [];
-    _answers[_taskQIndex] = optIdx;
+    if (!_taskAnswers[gameId]) _taskAnswers[gameId] = [];
+    _taskAnswers[gameId][_taskQIndex] = optIdx;
     if (_taskQIndex < sheet.questions.length - 1) {
         _taskQIndex++;
         document.getElementById("taskBody").innerHTML = renderTaskQuestion(gameId);
     } else {
-        const { score, total, correct, answers } = saveTaskResult(gameId, _answers);
+        const { score, total, correct, answers } = saveTaskResult(gameId, _taskAnswers[gameId]);
         document.getElementById("taskBody").innerHTML = renderTaskReview(gameId, { answers, correct, score, total }) +
             `<button class="taskCloseBtn" onclick="closeTaskSheet()">返回大厅</button>`;
     }
