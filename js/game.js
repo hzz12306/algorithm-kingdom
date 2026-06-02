@@ -560,11 +560,7 @@ function showProfileModal(firstTime) {
         </div>
         <div class="profileField">
           <label>我的班级</label>
-          <input id="profileClass" placeholder="例如：三年级一班" maxlength="30">
-        </div>
-        <div class="profileField">
-          <label>老师姓名（选填）</label>
-          <input id="profileTeacher" placeholder="你的信息科技老师" maxlength="20">
+          <input id="profileClass" placeholder="例如：401" maxlength="30">
         </div>
         <button class="profileBtn" onclick="confirmProfile()">🚀 开始冒险</button>
       </div>
@@ -575,7 +571,8 @@ function showProfileModal(firstTime) {
 function confirmProfile() {
     const name = document.getElementById("profileName").value.trim();
     const className = document.getElementById("profileClass").value.trim();
-    const teacher = document.getElementById("profileTeacher").value.trim();
+    const teacherEl = document.getElementById("profileTeacher");
+    const teacher = teacherEl ? teacherEl.value.trim() : "";
     if (!name) { alert("请输入你的名字哦！"); return; }
     saveStudentProfile(name, className + (teacher ? " · " + teacher : ""));
     document.getElementById("profileModal").remove();
