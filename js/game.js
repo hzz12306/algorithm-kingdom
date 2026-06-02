@@ -2,22 +2,29 @@
    全局统计系统
    ========================== */
 
+const GAME_STATS_VERSION = 2;
+
 function getGameStats() {
     const saved = localStorage.getItem("gameStats");
     if (saved) {
         const data = JSON.parse(saved);
-        // JSON 不支持 Infinity，还原 null 为 Infinity
-        ["cook","library","brush","branch"].forEach(k => {
-            if (data[k] && data[k].bestTime == null) data[k].bestTime = Infinity;
-        });
+        if (data._version !== GAME_STATS_VERSION) {
+            localStorage.removeItem("gameStats");
+            return defaultGameStats();
+        }
         return data;
     }
+    return defaultGameStats();
+}
+
+function defaultGameStats() {
     return {
         cook: { attempts: 0, bestTime: Infinity, bestAccuracy: 0, completed: false },
         library: { attempts: 0, bestTime: Infinity, bestAccuracy: 0, completed: false },
         brush: { attempts: 0, bestTime: Infinity, bestAccuracy: 0, completed: false },
         branch: { attempts: 0, bestTime: Infinity, completed: false },
-        total: { attempts: 0, time: 0, completed: 0 }
+        total: { attempts: 0, time: 0, completed: 0 },
+        _version: GAME_STATS_VERSION
     };
 }
 
@@ -33,6 +40,7 @@ function saveGameStats(game, data) {
                           + (stats.library.completed ? 1 : 0)
                           + (stats.brush.completed ? 1 : 0)
                           + (stats.branch.completed ? 1 : 0);
+    stats._version = GAME_STATS_VERSION;
 
     localStorage.setItem("gameStats", JSON.stringify(stats));
     updateStatsPanel();
@@ -290,9 +298,17 @@ const taskSheets = {
     }
 };
 
+const TASK_VERSION = 2;
+
 function getTaskResults() {
     const saved = localStorage.getItem("taskResults");
-    return saved ? JSON.parse(saved) : {};
+    if (!saved) return {};
+    const data = JSON.parse(saved);
+    if (data._version !== TASK_VERSION) {
+        localStorage.removeItem("taskResults");
+        return {};
+    }
+    return data;
 }
 
 function saveTaskResult(gameId, answers) {
@@ -302,6 +318,7 @@ function saveTaskResult(gameId, answers) {
     const total = sheet.questions.length;
     const results = getTaskResults();
     results[gameId] = { answers, correct, score, total, timestamp: Date.now() };
+    results._version = TASK_VERSION;
     localStorage.setItem("taskResults", JSON.stringify(results));
     return { score, total, correct, answers };
 }
