@@ -317,7 +317,7 @@ const taskSheets = {
 };
 
 function getTaskResults() {
-    const saved = localStorage.getItem("taskResults");
+    const saved = sessionStorage.getItem("taskResults");
     return saved ? JSON.parse(saved) : {};
 }
 
@@ -328,7 +328,7 @@ function saveTaskResult(gameId, answers) {
     const total = sheet.questions.length;
     const results = getTaskResults();
     results[gameId] = { answers, correct, score, total, timestamp: Date.now() };
-    localStorage.setItem("taskResults", JSON.stringify(results));
+    sessionStorage.setItem("taskResults", JSON.stringify(results));
     updateStatsPanel();
     return { score, total, correct, answers };
 }

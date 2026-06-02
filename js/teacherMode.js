@@ -385,7 +385,7 @@ function tmRenderGrowth() {
     const achieve = tmGetAchievements();
 
     const ids = ["cook", "library", "brush", "branch"];
-    const labels = { cook: "🍅 厨房小厨神", library: "📚 图书馆小达人", brush: "🪥 机器人刷牙", branch: "🚦 算法挑战赛" };
+    const labels = { cook: "🍅 厨房小厨神", library: "📚 图书馆小达人", brush: "🪥 机器人刷牙", branch: "🚦 机器人回家" };
 
     let teacherEval = localStorage.getItem("tmTeacherEval") || "";
 
@@ -698,7 +698,7 @@ function tmImportJSON() {
                 if (data.leaderboard) localStorage.setItem("algorithmKingdomLeaderboard", JSON.stringify(data.leaderboard));
                 if (data.gameStats) sessionStorage.setItem("gameStats", JSON.stringify(data.gameStats));
                 if (data.achievements) sessionStorage.setItem("achievements", JSON.stringify(data.achievements));
-                if (data.taskResults) localStorage.setItem("taskResults", JSON.stringify(data.taskResults));
+                if (data.taskResults) sessionStorage.setItem("taskResults", JSON.stringify(data.taskResults));
                 alert("✅ 数据导入成功！请刷新页面查看。");
                 location.reload();
             } catch(err) {
