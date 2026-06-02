@@ -14,18 +14,16 @@ function unlockAchievement(name){
 }
 
 function saveAchievements(){
-    localStorage.setItem("achievements", JSON.stringify(Object.assign({}, achievements, { _version: 2 })));
+    sessionStorage.setItem("achievements", JSON.stringify(achievements));
 }
 
 function loadAchievements(){
-    const saved = localStorage.getItem("achievements");
+    const saved = sessionStorage.getItem("achievements");
     if (saved) {
         const data = JSON.parse(saved);
-        if (data._version === 2) {
-            Object.keys(data).forEach(key => {
-                if (key !== "_version") achievements[key] = data[key];
-            });
-        }
+        Object.keys(data).forEach(key => {
+            achievements[key] = data[key];
+        });
     }
     updateAchievementPanel();
     checkAllAchievements();
