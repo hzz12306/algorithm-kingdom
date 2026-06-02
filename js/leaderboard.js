@@ -73,7 +73,6 @@ function showLeaderboard() {
         `}
         <div class="lbBtns">
           <button class="lbCloseBtn" onclick="document.getElementById('lbModal').remove()">关闭</button>
-          <button class="lbClearBtn" onclick="if(confirm('确定要清空排行榜吗？此操作不可恢复。')){clearLeaderboard();showLeaderboard();}">🗑️ 清空记录</button>
         </div>
       </div>
     </div>`;
