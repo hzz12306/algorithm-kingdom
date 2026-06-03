@@ -554,6 +554,14 @@ function saveStudentProfile(name, className) {
     if (d) d.textContent = name ? name + (className ? " · " + className : "") : "";
     const btn = document.getElementById("studentProfileBtn");
     if (btn) btn.style.display = name ? "" : "none";
+    // 同步到服务器（如果有）
+    try {
+        fetch(window.location.origin + "/api/students", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, className, time: new Date().toISOString() })
+        });
+    } catch {}
 }
 
 function showProfileModal(firstTime) {

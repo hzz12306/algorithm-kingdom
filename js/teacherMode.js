@@ -209,43 +209,66 @@ function tmRenderDashboard() {
 /* ==========================
    学生管理
    ========================== */
+let _tmAllStudents = [];
+
+async function tmSyncStudents() {
+    _tmAllStudents = [];
+    // 加载本地学生
+    const local = tmGetStudent();
+    if (local) _tmAllStudents.push(local);
+    // 从服务器加载
+    try {
+        const res = await fetch(window.location.origin + "/api/students");
+        if (res.ok) {
+            const cloud = await res.json();
+            cloud.forEach(s => {
+                if (!_tmAllStudents.find(e => e.name === s.name)) {
+                    _tmAllStudents.push(s);
+                }
+            });
+        }
+    } catch {}
+}
+
 function tmRenderStudents() {
     const leaderboard = tmGetLeaderboard();
-    const student = tmGetStudent();
     const tasks = tmGetTaskResults();
     const stats = tmGetStats();
 
+    if (_tmAllStudents.length === 0 && leaderboard.length === 0) {
+        return `
+        <div class="tmSection">
+          <h2>👥 学生管理</h2>
+          <p class="tmEmpty">暂无学生数据，完成游戏后会自动记录</p>
+        </div>`;
+    }
+
     let rows = leaderboard.map((r, i) => {
-        const tasksDone = Object.keys(tasks).filter(k => tasks[k] && tasks[k].score !== undefined).length;
+        const info = _tmAllStudents.find(s => s.name === r.name);
+        const cls = info ? info.className || "" : "";
         return `
         <tr>
           <td>${i + 1}</td>
-          <td>${r.name}</td>
+          <td>${r.name}${cls ? "<br><small>" + cls + "</small>" : ""}</td>
           <td>${r.date}</td>
-          <td>${r.score}</td>
+          <td>${r.totalScore || r.score || 0}/200</td>
           <td>${r.levelName}</td>
-          <td>${Math.round(tasksDone / 4 * 100)}%</td>
           <td class="tmActions">
             <button onclick="tmViewStudent('${r.name}')" title="查看">👁️</button>
             <button onclick="tmEditStudent('${r.name}')" title="编辑">✏️</button>
-            <button onclick="tmDeleteStudent(${i})" title="删除">🗑️</button>
+            <button onclick="tmDeleteStudent('${r.name}')" title="删除">🗑️</button>
           </td>
         </tr>`;
     }).join("");
 
-    if (!rows && student) {
-        rows = `<tr><td>1</td><td>${student.name}</td><td>${new Date().toLocaleDateString()}</td><td>${tmGetScores()?.total || 0}</td><td>${tmGetScores()?.levelName || "--"}</td><td>--</td><td class="tmActions"><button onclick="tmViewStudent('${student.name}')">👁️</button></td></tr>`;
-    }
-
     return `
     <div class="tmSection">
-      <h2>👥 学生管理</h2>
-      ${!rows ? '<p class="tmEmpty">暂无学生数据，完成游戏后会自动记录</p>' : `
+      <h2>👥 学生管理 (${_tmAllStudents.length} 人)</h2>
       <table class="tmTable">
-        <tr><th>#</th><th>姓名</th><th>日期</th><th>总分</th><th>等级</th><th>完成率</th><th>操作</th></tr>
+        <tr><th>#</th><th>姓名/班级</th><th>日期</th><th>总分</th><th>等级</th><th>操作</th></tr>
         ${rows}
-      </table>`}
-      <div class="tmNote">💡 点击 👁️ 查看学生详情，✏️ 编辑成绩，🗑️ 删除记录</div>
+      </table>
+      <div class="tmNote">💡 点击 👁️ 查看详情，✏️ 编辑，🗑️ 删除</div>
     </div>`;
 }
 
@@ -287,12 +310,40 @@ function tmEditStudent(name) {
     tmSwitchTab("students");
 }
 
-function tmDeleteStudent(idx) {
-    if (!confirm("确定要删除该学生记录吗？")) return;
+function tmDeleteStudent(name) {
+    if (!confirm(`确定删除 ${name} 的所有数据？`)) return;
     const lb = tmGetLeaderboard();
-    lb.splice(idx, 1);
-    localStorage.setItem("algorithmKingdomLeaderboard", JSON.stringify(lb));
+    const newLB = lb.filter(x => x.name !== name);
+    localStorage.setItem(LB_KEY, JSON.stringify(newLB));
+    // 同步删除到服务器
+    try {
+        fetch(window.location.origin + "/api/students/" + encodeURIComponent(name), { method: "DELETE" });
+    } catch {}
     tmSwitchTab("students");
+}
+
+async function tmSwitchTab(tab) {
+    teacherActiveTab = tab;
+    if (tab === "students") await tmSyncStudents();
+    const body = document.getElementById("tmTabBody");
+    if (!body) return;
+    const renderers = {
+        dashboard: tmRenderDashboard,
+        students: tmRenderStudents,
+        tasks: tmRenderTasks,
+        leaderboard: tmRenderLeaderboardTab,
+        growth: tmRenderGrowthTab,
+        certificate: tmRenderCertTab,
+        classroom: tmRenderClassroom,
+        analysis: tmRenderAnalysis,
+        data: tmRenderData
+    };
+    // 高亮标签
+    document.querySelectorAll(".tmTab").forEach(el => {
+        const tabName = el.getAttribute("onclick")?.match(/'(\w+)'/)?.[1];
+        el.className = "tmTab" + (tabName === tab ? " active" : "");
+    });
+    body.innerHTML = renderers[tab] ? renderers[tab]() : "<p>功能开发中...</p>";
 }
 
 /* ==========================
