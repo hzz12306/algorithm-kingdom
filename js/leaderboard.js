@@ -1,35 +1,63 @@
 /* ==========================
    排行榜系统
-   使用 localStorage 持久化保存
+   支持本地 + 云端同步
    ========================== */
 
 const LB_KEY = "algorithmKingdomLeaderboard";
 const LEVEL_NAMES = ["", "🏆 算法探索家", "🥇 算法小达人", "👑 算法大师"];
+const SERVER_URL = window.location.origin + "/api/leaderboard";
 
 function getLeaderboard() {
     const saved = localStorage.getItem(LB_KEY);
     return saved ? JSON.parse(saved) : [];
 }
 
-function saveToLeaderboard(studentName, totalScore, grade) {
+async function saveToLeaderboard(studentName, totalScore, grade) {
     if (!studentName) return;
-    const list = getLeaderboard();
-    list.push({
+    const entry = {
         name: studentName,
-        score: totalScore,
+        totalScore: totalScore,
         grade: grade,
         levelName: LEVEL_NAMES[grade] || "算法探索家",
         date: new Date().toLocaleDateString("zh-CN")
-    });
-    list.sort((a, b) => b.score - a.score);
+    };
+    // 本地保存
+    const list = getLeaderboard();
+    const idx = list.findIndex(e => e.name === entry.name);
+    if (idx >= 0) {
+        list[idx] = entry;
+    } else {
+        list.push(entry);
+    }
+    list.sort((a, b) => (b.totalScore || b.score || 0) - (a.totalScore || a.score || 0));
     localStorage.setItem(LB_KEY, JSON.stringify(list));
+    // 云端同步（如果服务器在运行）
+    try {
+        await fetch(SERVER_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(entry)
+        });
+    } catch {}
+}
+
+async function syncLeaderboard() {
+    try {
+        const res = await fetch(SERVER_URL);
+        if (!res.ok) return;
+        const cloud = await res.json();
+        if (Array.isArray(cloud) && cloud.length > 0) {
+            localStorage.setItem(LB_KEY, JSON.stringify(cloud));
+        }
+    } catch {}
 }
 
 function clearLeaderboard() {
     localStorage.removeItem(LB_KEY);
 }
 
-function showLeaderboard() {
+async function showLeaderboard() {
+    await syncLeaderboard();
     const existing = document.getElementById("lbModal");
     if (existing) existing.remove();
 
@@ -61,7 +89,7 @@ function showLeaderboard() {
                   <tr class="lbRow ${isTop3 ? 'lbTop' : ''} ${isTop3 ? 'lbTop' + (i+1) : ''}">
                     <td class="lbRank">${medal}</td>
                     <td class="lbName">${r.name}</td>
-                    <td class="lbScore">${r.score}</td>
+                    <td class="lbScore">${r.totalScore || r.score || 0}</td>
                     <td class="lbGrade">${r.levelName}</td>
                     <td class="lbDate">${r.date}</td>
                   </tr>`;
