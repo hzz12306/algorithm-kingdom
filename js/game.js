@@ -301,7 +301,7 @@ const taskSheets = {
         title: "机器人回家", icon: "🚀",
         questions: [
             { text: "帮助机器人回家时，为什么选择路线更短的算法？", options: ["更快到达终点", "看起来更漂亮", "没有区别"], correct: 0 },
-            { text: "回家途中想看风景选择哪一条？", options: ["自己喜欢的路", "车多的路"], correct: 0 },
+            { text: "回家途中想看风景选择哪一条？", options: ["风景多的路", "车多的路"], correct: 0 },
             { text: "通过本关你发现：", options: ["一个问题可以有多种解决方法", "一个问题只有一种解决方法"], correct: 0 },
             { text: "选择算法时应该优先考虑：", options: ["是否正确", "是否省时间", "是否正确并且高效"], correct: 2 }
         ]
