@@ -473,3 +473,165 @@ function tmDownloadCSV(csv, filename) {
     a.click();
     URL.revokeObjectURL(a.href);
 }
+
+function tmExportCSV() {
+    const lb = tmGetLeaderboard();
+    const tasks = tmGetTaskResults();
+    let csv = "姓名,总分,等级,日期\n";
+    lb.forEach(r => { csv += `${r.name},${_tmScore(r)},${r.levelName},${r.date}\n`; });
+    if (Object.keys(tasks).filter(k => k !== "_version").length) {
+        csv += "\n任务单数据\n";
+        Object.keys(tasks).filter(k => k !== "_version").forEach(id => {
+            const t = tasks[id];
+            if (t) csv += `${id},${t.score}/${t.total}\n`;
+        });
+    }
+    tmDownloadCSV(csv, "算法王国数据.csv");
+}
+
+/* ==========================
+   成长记录册
+   ========================== */
+function tmRenderGrowth() {
+    const lb = tmGetLeaderboard();
+    const tasks = tmGetTaskResults();
+    const taskIds = Object.keys(tasks).filter(k => k !== "_version");
+
+    if (!lb.length && !taskIds.length) {
+        return '<div class="tmSection"><h2>📒 成长记录册</h2><p class="tmEmpty">暂无成长记录数据</p></div>';
+    }
+
+    let html = `<div class="tmSection"><h2>📒 成长记录册</h2>`;
+
+    lb.forEach((r, i) => {
+        const studentTasks = taskIds.map(id => {
+            const t = tasks[id];
+            const sheet = typeof taskSheets !== "undefined" && taskSheets ? taskSheets[id] : null;
+            if (!t) return "";
+            const correctCount = t.correct ? t.correct.filter(Boolean).length : 0;
+            const total = t.total || (sheet ? sheet.questions.length : 1);
+            return `<span style="margin:0 4px;font-size:12px;background:#f0f0f0;padding:2px 6px;border-radius:4px">${sheet && sheet.icon ? sheet.icon : "📝"} ${correctCount}/${total}</span>`;
+        }).join("");
+
+        html += `
+        <div class="tmTaskCard" style="margin-bottom:8px;padding:8px 12px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span><strong>#${i+1} ${r.name}</strong> ${r.className || ""}</span>
+            <span>⭐ ${_tmScore(r)}/200 🎖️ ${r.levelName || "未评级"}</span>
+          </div>
+          <div style="margin-top:4px;color:#666;font-size:13px">任务单完成情况: ${studentTasks || "暂无"}</div>
+          <div style="font-size:12px;color:#999">${r.date || ""}</div>
+        </div>`;
+    });
+
+    html += "</div>";
+    return html;
+}
+
+/* ==========================
+   证书管理
+   ========================== */
+function tmRenderCertificates() {
+    const lb = tmGetLeaderboard();
+    if (!lb.length) {
+        return '<div class="tmSection"><h2>🎓 证书管理</h2><p class="tmEmpty">暂无证书数据，学生完成游戏后可生成证书</p></div>';
+    }
+
+    const highLevel = lb.filter(r => _tmScore(r) >= 120);
+
+    return `
+    <div class="tmSection">
+      <h2>🎓 证书管理</h2>
+      <p>共有 ${lb.length} 名学生完成游戏，其中 ${highLevel.length} 人达到证书标准 (≥120分)</p>
+      ${highLevel.length ? `
+      <table class="tmTable">
+        <tr><th>#</th><th>姓名</th><th>总分</th><th>等级</th></tr>
+        ${highLevel.map((r, i) => `
+          <tr>
+            <td>${i+1}</td>
+            <td>${r.name}</td>
+            <td>${_tmScore(r)}</td>
+            <td>${r.levelName}</td>
+          </tr>`).join("")}
+      </table>` : ""}
+    </div>`;
+}
+
+/* ==========================
+   课堂控制
+   ========================== */
+function tmRenderClassroom() {
+    return `
+    <div class="tmSection">
+      <h2>🎮 课堂控制</h2>
+      <div class="tmNote">💡 控制游戏模块的开放状态</div>
+      <table class="tmTable">
+        <tr><th>游戏</th><th>状态</th><th>操作</th></tr>
+        <tr><td>🍳 厨房小厨神</td><td><span class="tmGameLock locked">🔓 开放</span></td><td><button class="tmBtn tmBtnSmall" onclick="this.parentElement.parentElement.querySelector('.tmGameLock').classList.toggle('locked')">切换</button></td></tr>
+        <tr><td>📚 图书馆达人</td><td><span class="tmGameLock locked">🔓 开放</span></td><td><button class="tmBtn tmBtnSmall" onclick="this.parentElement.parentElement.querySelector('.tmGameLock').classList.toggle('locked')">切换</button></td></tr>
+        <tr><td>🪥 机器人刷牙</td><td><span class="tmGameLock locked">🔓 开放</span></td><td><button class="tmBtn tmBtnSmall" onclick="this.parentElement.parentElement.querySelector('.tmGameLock').classList.toggle('locked')">切换</button></td></tr>
+        <tr><td>🔀 算法岔路口</td><td><span class="tmGameLock locked">🔓 开放</span></td><td><button class="tmBtn tmBtnSmall" onclick="this.parentElement.parentElement.querySelector('.tmGameLock').classList.toggle('locked')">切换</button></td></tr>
+      </table>
+    </div>`;
+}
+
+/* ==========================
+   数据分析
+   ========================== */
+function tmRenderAnalysis() {
+    const lb = tmGetLeaderboard();
+    const tasks = tmGetTaskResults();
+    const taskIds = Object.keys(tasks).filter(k => k !== "_version");
+
+    const totalStudents = lb.length;
+    const scores = lb.map(r => _tmScore(r));
+    const avgScore = scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
+    const maxScore = scores.length ? Math.max(...scores) : 0;
+    const minScore = scores.length ? Math.min(...scores) : 0;
+    const passCount = scores.filter(s => s >= 120).length;
+
+    let taskStats = "";
+    if (taskIds.length) {
+        taskStats = `<h3 style="margin-top:16px">📝 任务单统计</h3><table class="tmTable"><tr><th>任务</th><th>完成人数</th><th>平均正确率</th></tr>`;
+        taskIds.forEach(id => {
+            const sheet = typeof taskSheets !== "undefined" && taskSheets ? taskSheets[id] : null;
+            const t = tasks[id];
+            if (!t) return;
+            const correctCount = t.correct ? t.correct.filter(Boolean).length : 0;
+            const total = t.total || (sheet ? sheet.questions.length : 1);
+            const rate = Math.round(correctCount / total * 100);
+            taskStats += `<tr><td>${sheet && sheet.icon ? sheet.icon : "📝"} ${sheet ? sheet.title : id}</td><td>1</td><td>${rate}%</td></tr>`;
+        });
+        taskStats += "</table>";
+    }
+
+    return `
+    <div class="tmSection">
+      <h2>📈 数据分析</h2>
+      <div class="tmDashGrid">
+        <div class="tmDashCard"><span class="tmDashNum">${totalStudents}</span><span class="tmDashLabel">学生总数</span></div>
+        <div class="tmDashCard"><span class="tmDashNum">${avgScore}</span><span class="tmDashLabel">平均分</span></div>
+        <div class="tmDashCard"><span class="tmDashNum">${maxScore}</span><span class="tmDashLabel">最高分</span></div>
+        <div class="tmDashCard"><span class="tmDashNum">${minScore}</span><span class="tmDashLabel">最低分</span></div>
+        <div class="tmDashCard"><span class="tmDashNum">${passCount}</span><span class="tmDashLabel">达标人数 (≥120)</span></div>
+      </div>
+      ${taskStats}
+    </div>`;
+}
+
+/* ==========================
+   数据管理
+   ========================== */
+function tmRenderData() {
+    return `
+    <div class="tmSection">
+      <h2>💾 数据管理</h2>
+      <p>管理所有游戏数据，支持导入/导出</p>
+      <div class="tmBtnRow" style="margin-top:16px">
+        <button class="tmBtn" onclick="tmExportCSV()">📥 导出CSV</button>
+        <button class="tmBtn" onclick="tmExportJSON()">💾 导出JSON备份</button>
+        <button class="tmBtn" onclick="tmImportJSON()">📂 导入JSON备份</button>
+        <button class="tmBtn" onclick="if(confirm('确定清空所有本地数据？')){localStorage.clear();sessionStorage.clear();alert('已清空');location.reload()}">🗑️ 清空所有数据</button>
+      </div>
+    </div>`;
+}
