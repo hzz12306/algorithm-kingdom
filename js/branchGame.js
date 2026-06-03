@@ -142,7 +142,6 @@ function completeBranch(pathName) {
     setTimeout(() => {
         showBranchThinking(pathName, elapsed);
     }, 500);
-    setTimeout(() => showTaskSheet("branch"), 2000);
 }
 
 function showBranchThinking(pathName, elapsed) {
@@ -195,6 +194,8 @@ function showBranchThinking(pathName, elapsed) {
         你选了 ${icon} <strong>${pathName}</strong>！<br>
         三种算法都完成了任务，只是方式不同哦！
     </p>
+
+    <button onclick="showTaskSheet('branch')" style="margin-top:12px;padding:10px 28px;background:linear-gradient(135deg,#FFA726,#F57C00);color:white;border:none;border-radius:14px;font-size:16px;cursor:pointer;font-weight:bold;box-shadow:0 4px 12px rgba(255,152,0,.4)">📝 完成任务单</button>
 </div>
 
     `;
