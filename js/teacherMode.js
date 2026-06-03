@@ -295,7 +295,8 @@ function tmEditStudent(name) {
     const lb = tmGetLeaderboard();
     const idx = lb.findIndex(x => x.name === name);
     if (idx === -1) { alert("未找到该学生"); return; }
-    const newScore = prompt(`修改 ${name} 的总分（当前: ${lb[idx].score}）:`, lb[idx].score);
+    const current = _tmScore(lb[idx]);
+    const newScore = prompt(`修改 ${name} 的总分（当前: ${current}）:`, current);
     if (newScore === null) return;
     const s = parseInt(newScore);
     if (isNaN(s) || s < 0 || s > 200) { alert("请输入0-200之间的分数"); return; }
@@ -304,10 +305,10 @@ function tmEditStudent(name) {
     else if (s >= 120) grade = 2;
     else if (s >= 0) grade = 1;
     const grades = ["", "🏆 算法探索家", "🥇 算法小达人", "👑 算法大师"];
-    lb[idx].score = s;
+    lb[idx].totalScore = s;
     lb[idx].grade = grade;
     lb[idx].levelName = grades[grade];
-    localStorage.setItem("algorithmKingdomLeaderboard", JSON.stringify(lb));
+    localStorage.setItem(LB_KEY, JSON.stringify(lb));
     tmSwitchTab("students");
 }
 
