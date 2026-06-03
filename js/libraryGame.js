@@ -236,7 +236,7 @@ C区
 
 window.playerPos = 1;
 updateZoneHighlight();
-document.getElementById("player").style.left = (100 + 1 * 220) + "px";
+(function(){var p=document.getElementById("player"),s=document.getElementById("zone"+ZONES[playerPos].charAt(0));if(p&&s)p.style.left=(s.offsetLeft+s.offsetWidth/2-p.offsetWidth/2)+"px"})();
 
 }
 
@@ -269,7 +269,7 @@ if(dir === "right") playerPos++;
 if(playerPos < 0) playerPos = 0;
 if(playerPos > 2) playerPos = 2;
 
-player.style.left = (100 + playerPos * 220) + "px";
+player.style.left = (function(){var s=document.getElementById("zone"+ZONES[playerPos].charAt(0));return s?s.offsetLeft+s.offsetWidth/2-player.offsetWidth/2:"100px"})() + "px";
 updateZoneHighlight();
 
 if (ZONES[playerPos] === bookZone) {
