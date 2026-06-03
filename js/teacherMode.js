@@ -137,6 +137,13 @@ function tmSwitchTab(tab) {
         leaderboard: "排行榜管理", growth: "成长记录册", certificates: "证书管理",
         classroom: "课堂控制", analysis: "数据分析", data: "数据管理"
     }[tab])));
+    // 学生管理标签时同步服务器数据
+    if (tab === "students") {
+        tmSyncStudents().then(() => {
+            document.getElementById("tmContent").innerHTML = tmRenderStudents();
+        });
+        return;
+    }
     document.getElementById("tmContent").innerHTML = {
         dashboard: tmRenderDashboard(),
         students: tmRenderStudents(),
@@ -148,7 +155,6 @@ function tmSwitchTab(tab) {
         analysis: tmRenderAnalysis(),
         data: tmRenderData()
     }[tab] || "<p>加载中...</p>";
-    // Re-bind event listeners
     tmBindEvents(tab);
 }
 
@@ -320,30 +326,6 @@ function tmDeleteStudent(name) {
         fetch(window.location.origin + "/api/students/" + encodeURIComponent(name), { method: "DELETE" });
     } catch {}
     tmSwitchTab("students");
-}
-
-async function tmSwitchTab(tab) {
-    teacherActiveTab = tab;
-    if (tab === "students") await tmSyncStudents();
-    const body = document.getElementById("tmTabBody");
-    if (!body) return;
-    const renderers = {
-        dashboard: tmRenderDashboard,
-        students: tmRenderStudents,
-        tasks: tmRenderTasks,
-        leaderboard: tmRenderLeaderboardTab,
-        growth: tmRenderGrowthTab,
-        certificate: tmRenderCertTab,
-        classroom: tmRenderClassroom,
-        analysis: tmRenderAnalysis,
-        data: tmRenderData
-    };
-    // 高亮标签
-    document.querySelectorAll(".tmTab").forEach(el => {
-        const tabName = el.getAttribute("onclick")?.match(/'(\w+)'/)?.[1];
-        el.className = "tmTab" + (tabName === tab ? " active" : "");
-    });
-    body.innerHTML = renderers[tab] ? renderers[tab]() : "<p>功能开发中...</p>";
 }
 
 /* ==========================
