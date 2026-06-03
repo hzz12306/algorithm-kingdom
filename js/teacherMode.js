@@ -94,7 +94,8 @@ function renderTeacherDashboard() {
     leaderboard.forEach(r => { if (r.grade >= 1 && r.grade <= 3) levelCounts[r.grade]++; });
 
     const top3 = leaderboard.slice(0, 3);
-    const allScores = leaderboard.map(r => r.score);
+    const getScore = r => r.totalScore || r.score || 0;
+    const allScores = leaderboard.map(r => getScore(r));
     const avgScore = allScores.length ? Math.round(allScores.reduce((a, b) => a + b, 0) / allScores.length) : 0;
     const maxScore = allScores.length ? Math.max(...allScores) : 0;
     const minScore = allScores.length ? Math.min(...allScores) : 0;
@@ -180,7 +181,8 @@ function tmRenderDashboard() {
     const achieve = tmGetAchievements();
 
     const totalStudents = leaderboard.length;
-    const allScores = leaderboard.map(r => r.score);
+    const getScore = r => r.totalScore || r.score || 0;
+    const allScores = leaderboard.map(r => getScore(r));
     const avgScore = allScores.length ? Math.round(allScores.reduce((a, b) => a + b, 0) / allScores.length) : 0;
     const maxScore = allScores.length ? Math.max(...allScores) : 0;
     const minScore = allScores.length ? Math.min(...allScores) : 0;
@@ -206,7 +208,7 @@ function tmRenderDashboard() {
       <h3 style="margin-top:16px">🥇 排行榜前三名</h3>
       <table class="tmTable">
         <tr><th>🏅</th><th>姓名</th><th>总分</th><th>等级</th></tr>
-        ${top3.map((r, i) => `<tr><td>${["🥇","🥈","🥉"][i]||(i+1)}</td><td>${r.name}</td><td>${r.score}</td><td>${r.levelName}</td></tr>`).join("")}
+        ${top3.map((r, i) => `<tr><td>${["🥇","🥈","🥉"][i]||(i+1)}</td><td>${r.name}</td><td>${getScore(r)}</td><td>${r.levelName}</td></tr>`).join("")}
       </table>` : '<p style="color:#999;margin-top:12px">暂无排行榜数据</p>'}
       ${student ? `<div class="tmCurrentUser">👤 当前学生：${student.name} ${student.className || ""}</div>` : ""}
     </div>`;
@@ -603,9 +605,10 @@ function tmRenderAnalysis() {
     const achieve = tmGetAchievements();
     const lb = tmGetLeaderboard();
 
-    const maxScore = lb.length ? Math.max(...lb.map(r => r.score)) : 0;
-    const minScore = lb.length ? Math.min(...lb.map(r => r.score)) : 0;
-    const avgScore = lb.length ? Math.round(lb.reduce((s, r) => s + r.score, 0) / lb.length) : 0;
+    const getLBScore = r => r.totalScore || r.score || 0;
+    const maxScore = lb.length ? Math.max(...lb.map(r => getLBScore(r))) : 0;
+    const minScore = lb.length ? Math.min(...lb.map(r => getLBScore(r))) : 0;
+    const avgScore = lb.length ? Math.round(lb.reduce((s, r) => s + getLBScore(r), 0) / lb.length) : 0;
     const levelDist = { 1: 0, 2: 0, 3: 0 };
     lb.forEach(r => { if (r.grade >= 1 && r.grade <= 3) levelDist[r.grade]++; });
 
