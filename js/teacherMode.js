@@ -237,32 +237,24 @@ async function tmSyncStudents() {
 }
 
 function tmRenderStudents() {
-    const leaderboard = tmGetLeaderboard();
-    const tasks = tmGetTaskResults();
-    const stats = tmGetStats();
-
-    if (_tmAllStudents.length === 0 && leaderboard.length === 0) {
+    if (_tmAllStudents.length === 0) {
         return `
         <div class="tmSection">
           <h2>👥 学生管理</h2>
-          <p class="tmEmpty">暂无学生数据，完成游戏后会自动记录</p>
+          <p class="tmEmpty">暂无学生数据，学生填写信息后会自动出现在这里</p>
         </div>`;
     }
 
-    let rows = leaderboard.map((r, i) => {
-        const info = _tmAllStudents.find(s => s.name === r.name);
-        const cls = info ? info.className || "" : "";
+    let rows = _tmAllStudents.map((s, i) => {
         return `
         <tr>
           <td>${i + 1}</td>
-          <td>${r.name}${cls ? "<br><small>" + cls + "</small>" : ""}</td>
-          <td>${r.date}</td>
-          <td>${r.totalScore || r.score || 0}/200</td>
-          <td>${r.levelName}</td>
+          <td>${s.name}${s.className ? "<br><small>" + s.className + "</small>" : ""}</td>
+          <td>${s.time ? new Date(s.time).toLocaleDateString("zh-CN") : "--"}</td>
+          <td>--</td>
+          <td>--</td>
           <td class="tmActions">
-            <button onclick="tmViewStudent('${r.name}')" title="查看">👁️</button>
-            <button onclick="tmEditStudent('${r.name}')" title="编辑">✏️</button>
-            <button onclick="tmDeleteStudent('${r.name}')" title="删除">🗑️</button>
+            <button onclick="tmDeleteStudent('${s.name}')" title="删除">🗑️</button>
           </td>
         </tr>`;
     }).join("");
@@ -270,11 +262,11 @@ function tmRenderStudents() {
     return `
     <div class="tmSection">
       <h2>👥 学生管理 (${_tmAllStudents.length} 人)</h2>
+      <div class="tmNote">💡 学生填写信息后自动收录，排行榜数据需学生完成游戏后提交</div>
       <table class="tmTable">
-        <tr><th>#</th><th>姓名/班级</th><th>日期</th><th>总分</th><th>等级</th><th>操作</th></tr>
+        <tr><th>#</th><th>姓名/班级</th><th>填写时间</th><th>总分</th><th>等级</th><th>操作</th></tr>
         ${rows}
       </table>
-      <div class="tmNote">💡 点击 👁️ 查看详情，✏️ 编辑，🗑️ 删除</div>
     </div>`;
 }
 
