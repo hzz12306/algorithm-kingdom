@@ -323,7 +323,9 @@ function getTaskResults() {
 
 function saveTaskResult(gameId, answers) {
     const sheet = taskSheets[gameId];
-    const correct = answers.map((a, i) => a === sheet.questions[i].correct);
+    const correct = gameId === "selfEval"
+        ? answers.map(() => true)
+        : answers.map((a, i) => a === sheet.questions[i].correct);
     const score = correct.filter(Boolean).length;
     const total = sheet.questions.length;
     const results = getTaskResults();
@@ -378,7 +380,10 @@ function renderTaskReview(gameId, data) {
             }).join("")}
           </div>
         </div>`
-        ).join("");
+        ).join("") + `
+    <div class="taskResult">
+      ✅ 自我评价已提交
+    </div>`;
     }
     return sheet.questions.map((q, qi) => {
         const isCorrect = data.correct[qi];
@@ -456,11 +461,19 @@ function renderSelfEvalSection() {
             </div>
           `).join("")}
           <div class="selfEvalReEval">
-            <button class="growthCertBtn" onclick="closeGrowthRecord();showSelfEval()">📝 重新评价</button>
+            <button class="growthCertBtn" onclick="closeGrowthRecord();openSelfEval()">📝 重新评价</button>
           </div>
         </div>`;
     }
-    return `<button class="growthCertBtn" onclick="closeGrowthRecord();showSelfEval()">✏️ 开始自我评价</button>`;
+    return `<button class="growthCertBtn" onclick="closeGrowthRecord();openSelfEval()">✏️ 开始自我评价</button>`;
+}
+
+function openSelfEval() {
+    setTimeout(function(){ showTaskSheet("selfEval"); }, 100);
+}
+
+function showSelfEval() {
+    showTaskSheet("selfEval");
 }
 
 function showSelfEval() {
@@ -613,7 +626,7 @@ function editProfile() {
         </div>
         <div class="profileField">
           <label>我的班级</label>
-          <input id="profileClass" value="${p ? p.className.split(' · ')[0] || '' : ''}" maxlength="30">
+          <input id="profileClass" value="${p ? (p.className || '').split(' · ')[0] || '' : ''}" maxlength="30">
         </div>
         <button class="profileBtn" onclick="confirmProfile()">✅ 确认修改</button>
         <button class="profileBtn cancelBtn" onclick="document.getElementById('profileModal').remove()">取消</button>
