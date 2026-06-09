@@ -412,15 +412,24 @@ function renderTaskQuestion(gameId) {
     const allAnswered = getTaskResults()[gameId];
     if (allAnswered || _taskQIndex >= sheet.questions.length) return "";
     const isSelfEval = gameId === "selfEval";
+    const hasAnswer = _taskAnswers[gameId] && _taskAnswers[gameId][_taskQIndex] !== undefined;
+    const isLast = _taskQIndex === sheet.questions.length - 1;
     return `
     <div class="taskProgress">${isSelfEval ? "自我评价" : "第 " + (_taskQIndex+1) + "/" + sheet.questions.length + " 题"}</div>
     <div class="taskQuestion active">
       <p class="taskQText">${isSelfEval ? "💭 " : ""}${q.text}</p>
       <div class="taskOptions">
-        ${q.options.map((opt, oi) =>
-            `<div class="taskOption" onclick="selectTaskAnswer('${gameId}', ${oi})">${opt}</div>`
-        ).join("")}
+        ${q.options.map((opt, oi) => {
+            const sel = hasAnswer && oi === _taskAnswers[gameId][_taskQIndex] ? " optSelected" : "";
+            return `<div class="taskOption${sel}" onclick="selectTaskAnswer('${gameId}', ${oi})">${opt}</div>`;
+        }).join("")}
       </div>
+    </div>
+    <div class="taskNavRow">
+      ${_taskQIndex > 0 ? `<button class="taskNavBtn" onclick="goToPrevQuestion('${gameId}')">⬅ 上一题</button>` : '<span></span>'}
+      ${isLast
+        ? `<button class="taskNavBtn taskNavSubmit" onclick="submitTaskSheet('${gameId}')">✅ 提交</button>`
+        : `<button class="taskNavBtn" onclick="goToNextQuestion('${gameId}')">下一题 ➡</button>`}
     </div>`;
 }
 
@@ -428,14 +437,34 @@ function selectTaskAnswer(gameId, optIdx) {
     const sheet = taskSheets[gameId];
     if (!_taskAnswers[gameId]) _taskAnswers[gameId] = [];
     _taskAnswers[gameId][_taskQIndex] = optIdx;
+    document.getElementById("taskBody").innerHTML = renderTaskQuestion(gameId);
+}
+
+function goToPrevQuestion(gameId) {
+    if (_taskQIndex > 0) {
+        _taskQIndex--;
+        document.getElementById("taskBody").innerHTML = renderTaskQuestion(gameId);
+    }
+}
+
+function goToNextQuestion(gameId) {
+    const sheet = taskSheets[gameId];
+    if (!_taskAnswers[gameId] || _taskAnswers[gameId][_taskQIndex] === undefined) {
+        return;
+    }
     if (_taskQIndex < sheet.questions.length - 1) {
         _taskQIndex++;
         document.getElementById("taskBody").innerHTML = renderTaskQuestion(gameId);
-    } else {
-        const { score, total, correct, answers } = saveTaskResult(gameId, _taskAnswers[gameId]);
-        document.getElementById("taskBody").innerHTML = renderTaskReview(gameId, { answers, correct, score, total }) +
-            `<button class="taskCloseBtn" onclick="closeTaskSheet()">返回大厅</button>`;
     }
+}
+
+function submitTaskSheet(gameId) {
+    if (!_taskAnswers[gameId] || _taskAnswers[gameId].some(a => a === undefined)) {
+        return;
+    }
+    const { score, total, correct, answers } = saveTaskResult(gameId, _taskAnswers[gameId]);
+    document.getElementById("taskBody").innerHTML = renderTaskReview(gameId, { answers, correct, score, total }) +
+        `<button class="taskCloseBtn" onclick="closeTaskSheet()">返回大厅</button>`;
 }
 
 function closeTaskSheet() {
