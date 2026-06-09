@@ -472,14 +472,6 @@ function openSelfEval() {
     setTimeout(function(){ showTaskSheet("selfEval"); }, 100);
 }
 
-function showSelfEval() {
-    showTaskSheet("selfEval");
-}
-
-function showSelfEval() {
-    showTaskSheet("selfEval");
-}
-
 function closeGrowthRecord() {
     const m = document.getElementById("growthRecordModal");
     if (m) m.remove();
